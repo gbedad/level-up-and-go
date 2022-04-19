@@ -11,10 +11,10 @@
 }
 
 
-.instruction { /*copie des features du bootstrap input : voir ce qui peut etre enlevé pour alléger*/
+.instruction, .correction{ /*copie des features du bootstrap input : voir ce qui peut etre enlevé pour alléger*/
   height: 80px;
   margin-top: 1rem!important;
-  margin-bottom: 4rem!important;
+  /* margin-bottom: 4rem!important; */
   min-height: calc(1.5em + 1rem + 2px);
   padding: .5rem 1rem;
   font-size: 1.25rem;
@@ -27,6 +27,10 @@
   background-color: #fff;
   background-clip: padding-box;
   border: 5px solid orange/*#ced4da*/
+}
+.instruction, .correction { /*copie des features du bootstrap input : voir ce qui peut etre enlevé pour alléger*/
+
+  margin-bottom: 4rem!important;
 }
 
 .attempt {
