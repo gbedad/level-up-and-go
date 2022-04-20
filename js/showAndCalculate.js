@@ -9,29 +9,7 @@ let sign; //inutile ?
 let rangeMin; //inutile ?
 let rangeMax; //inutile ?
 
-
-const dataSet = [
-	[ //level1
-		[ //sublevel1
-			//questionType1
-			{level: 1, sublevel: 1, questionType: 1, par1: 0, sign1: '', rangeMin1: 1, rangeMax1: 5, operator: '+', par2: 0, sign2:'', rangeMin2: 2, rangeMax2: 5}	
-			
-		],
-    	[ //sublevel2 
-    	{level: 1, sublevel: 1, questionType: 1, par1: 1, sign1:'+', rangeMin1: 0, rangeMax1:6, operator: '+', par2: 1, sign2:'+', rangeMin2:0, rangeMax2:6}
-		],  	
-    	[ //sublevel3
-    	{level: '1', sublevel: '3', questionType: '1', par1: '1', sign1:'+', rangeMin1:'0', rangeMax1:'6', operator: '+', par2: '0', sign2:'', rangeMin2:'0', rangeMax2:'6'},
-    	{level: '1', sublevel: '3', questionType: '2', par1: '0', sign1:'', rangeMin1:'0', rangeMax1:'6', operator: '+', par2: '1', sign2:'+', rangeMin2:'0', rangeMax2:'6'}
-   		],
-    	[ //sublevel4
-    	{level: '1', sublevel: '4', questionType: '1', par1: '0', sign1:'+', rangeMin1:'0', rangeMax1:'6', operator: '+', par2: '1', sign2:'+', rangeMin2:'0', rangeMax2:'6'},
-    	{level: '1', sublevel: '4', questionType: '2', par1: '1', sign1:'+', rangeMin1:'0', rangeMax1:'6', operator: '+', par2: '0', sign2:'', rangeMin2:'0', rangeMax2:'6'},
-   		{level: '1', sublevel: '4', questionType: '3', par1: '0', sign1:'+', rangeMin1:'0', rangeMax1:'6', operator: '+', par2: '0', sign2:'+', rangeMin2:'0', rangeMax2:'6'}  	
-   		]
-   	]
-]
-
+//add condition
 
 function randomNum(rangeMin, rangeMax) {
 	let num = Math.floor(Math.random() * (rangeMax - rangeMin) ) + rangeMin;
@@ -109,3 +87,77 @@ function showCurrentQuestion(l,s,t){
 
 changeCurrentQuestion(0,1,0);
 console.log(result);
+
+//succession of attempts
+
+answer = false //à revoir après intégration
+let currentInput = document.querySelector('.attempt')////à revoir après intégration
+//1st attempt : la question apparaît dans le cadre, la box 1st attempt est là avec son placeholder, pas de case correction à droite
+// si réponse juste : fa-check (left), correction mode x (right) puis next question
+// si réponse fausse : fa-xmark(left), cadre réponse grisé, disparition clickbutton, correction mode y (right) puis 2nd attempt apparaît
+
+//2nd attempt : la question apparaît dans le cadre, la box 2nd attempt est là
+// si réponse juste : correction mode x (right) puis next question
+// si réponse fausse : correction mode y  (right) puis 3rd attempt apparaît
+
+
+function showCurrentQuestion(){
+    let questionBox = document.querySelector('.instruction');
+    let operationText= document.createTextNode("6 + 7 = ?");//
+    questionBox.appendChild(operationText);
+}
+showCurrentQuestion()
+
+function showExpectation(currentInput){
+    currentInput.placeholder = "6 + 7 = ...";//
+}
+showExpectation(currentInput);
+
+function createIcon(answer){
+    let iconPlace = document.querySelector('.icon');
+    let iconDiv = document.createElement('i');
+    iconPlace.appendChild(iconDiv);
+    const iconToAdd = iconDiv.classList;
+    iconToAdd.add("fa-solid");
+
+    if (answer===false){
+        iconToAdd.add("fa-xmark");     
+        //griser l'input
+    }   else { iconToAdd.add("fa-check");
+    }
+}
+createIcon(true)
+
+function createNewAttemptBox(){
+    let newAttemptPlace = document.querySelector('.attempt2');
+    let newAttemptBox = document.createElement('input');
+    newAttemptPlace.appendChild(newAttemptBox);
+    const newBoxToAdd = newAttemptBox.classList;
+    newBoxToAdd.add("form-control");
+    newBoxToAdd.add("attempt");
+    newBoxToAdd.add("form-control-lg");
+    newBoxToAdd.add("my-3");
+}
+createNewAttemptBox();
+
+function createNewButton(){
+    let newButtonPlace = document.querySelector('.submission');
+    let newButtonInput = document.createElement('button');
+    newButtonPlace.appendChild(newButtonInput);
+    newButtonInput.setAttribute('type', 'submit');
+    const newButtonToAdd = newButtonInput.classList;
+    newButtonToAdd.add("btn");
+
+    let newPlaneImage = document.createElement('img');
+    newButtonInput.appendChild(newPlaneImage);
+    newPlaneImage.setAttribute('src', "https://i.cloudup.com/gBzAn-oW_S-2000x2000.png");
+    newPlaneImage.setAttribute('id', "plane");
+    newPlaneImage.setAttribute('onclick',"planeAnim();");
+}
+createNewButton();
+
+function falseAttempt(){
+    createIncon(false);
+    createNewAttemptBox();
+}
+
