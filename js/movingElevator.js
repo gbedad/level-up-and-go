@@ -2,6 +2,10 @@
 import myRanges from '../data/ranges.json' assert { type: 'json' };
 
 // import './showOperationMode.js';
+import { whichOperation } from './showAndCalculate.js';
+
+let myData = whichOperation(0, 2, 0);
+console.log(myData);
 
 //* GLOBAL VARIABLES
 
@@ -32,12 +36,12 @@ const avatar = document.querySelector('.avatar');
 // let start = Math.round(Math.random(0, 1) * 10);
 // let end = -Math.round(Math.random(0, 1) * 10);
 
-const retrieveValuesFromDatas = (index) => {
-  let object = { start: myRanges[index].max, end: myRanges[index].min };
+const retrieveBuildingHeight = () => {
+  let object = { start: myData.max, end: myData.min };
   return object;
 };
 
-let { start, end } = retrieveValuesFromDatas(2);
+let { start, end } = retrieveBuildingHeight();
 
 const removeDivs = () => {
   let floorDiv = document.querySelectorAll('.floor');
@@ -118,18 +122,27 @@ const checkValidity = () => {
 checkValidity();
 console.table(s, ds, start, end);
 
+// const getAnimateFromTo = () => {
+//   let e = s + ds;
+//   let from = (start - s) * 40;
+//   let to = (start - e) * 40;
+//   let dist = (s - e) * 40;
+//   return { dist, from, to, e };
+// };
+
 const getAnimateFromTo = () => {
-  let e = s + ds;
-  let from = (start - s) * 40;
-  let to = (start - e) * 40;
-  let dist = (s - e) * 40;
+  let e = myData.result;
+  let from = (start - myData.num1) * 40;
+  let to = (start - myData.result) * 40;
+  let dist = myData.num2 * 40;
   return { dist, from, to, e };
 };
 
 let values = getAnimateFromTo();
+console.log(values);
 
 let floorDivs = [...document.querySelectorAll('.floor')];
-let startDiv = document.querySelector(`.floor${s}`);
+let startDiv = document.querySelector(`.floor${myData.num1}`);
 let endDiv = document.querySelector(`.floor${values.e}`);
 startDiv.style.color = 'green';
 // startDiv.style.backgroundColor = 'green';
@@ -146,18 +159,19 @@ floorDivs.forEach((floor) => {
     : (floor.style.paddingLeft = '5px');
 });
 
-arrow.style.top =
-  `${values.dist}` < 0 ? `${values.to + 41}px` : `${values.from + 41}px`;
+arrow.style.top = `${values.to + 41}px`;
 
-arrow.style.height =
-  `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
+arrow.style.height = `${values.dist}px`;
+//   `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
 
 arrow.classList.add('ve-line');
 append(building, arrow);
 append(arrow, i);
 i.classList.add('fa-solid');
 i.classList.add(
-  `${values.dist}` > 0 ? 'fa-arrow-down-long' : 'fa-arrow-up-long'
+  `${myData.num1}` > `${myData.result}`
+    ? 'fa-arrow-down-long'
+    : 'fa-arrow-up-long'
 );
 i.style.position = 'absolute';
 i.style.left = 'calc(50% + 5px)';

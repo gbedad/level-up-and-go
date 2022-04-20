@@ -1,0 +1,132 @@
+
+[
+  [
+    [
+      {
+        "level": 1,
+        "sublevel": 1,
+        "questionType": 1,
+        "par1": 0,
+        "sign1": "",
+        "rangeMin1": 1,
+        "rangeMax1": 5,
+        "operator": "+",
+        "par2": 0,
+        "sign2": "",
+        "rangeMin2": 1,
+        "rangeMax2": 5,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      }
+    ],
+    [
+      {
+        "level": 1,
+        "sublevel": 2,
+        "questionType": 2,
+        "par1": 1,
+        "sign1": "+",
+        "rangeMin1": 0,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 1,
+        "sign2": "+",
+        "rangeMin2": 0,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      }
+    ],
+    [
+      {
+        "level": 1,
+        "sublevel": 3,
+        "questionType": 1,
+        "par1": 1,
+        "sign1": "+",
+        "rangeMin1": 0,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 0,
+        "sign2": "",
+        "rangeMin2": 1,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      },
+      {
+        "level": 1,
+        "sublevel": 3,
+        "questionType": 2,
+        "par1": 0,
+        "sign1": "",
+        "rangeMin1": 1,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 1,
+        "sign2": "+",
+        "rangeMin2": 0,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      }
+    ],
+    [
+      {
+        "level": 1,
+        "sublevel": 4,
+        "questionType": 1,
+        "par1": 0,
+        "sign1": "+",
+        "rangeMin1": 0,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 1,
+        "sign2": "+",
+        "rangeMin2": 0,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      },
+      {
+        "level": 1,
+        "sublevel": 4,
+        "questionType": 2,
+        "par1": 1,
+        "sign1": "+",
+        "rangeMin1": 0,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 0,
+        "sign2": "",
+        "rangeMin2": 0,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      },
+      {
+        "level": 1,
+        "sublevel": 4,
+        "questionType": 3,
+        "par1": 0,
+        "sign1": "+",
+        "rangeMin1": 0,
+        "rangeMax1": 6,
+        "operator": "+",
+        "par2": 0,
+        "sign2": "",
+        "rangeMin2": 0,
+        "rangeMax2": 6,
+        "condition": "",
+        "min": 0,
+        "max": 12
+      }
+    ]
+  ]
+]
