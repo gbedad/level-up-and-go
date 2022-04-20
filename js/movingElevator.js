@@ -19,7 +19,7 @@ function append(parent, el) {
 }
 
 //? Dom elements variables
-// const container = document.querySelector('.container');
+const rightCol = document.querySelector('.right');
 const boxAnimate = document.querySelector('.elevator');
 const building = document.getElementById('building');
 const elevatorStart = document.getElementById('elevator_start');
@@ -27,6 +27,7 @@ const road = document.querySelector('#road');
 // const veLine = document.querySelector('.ve-line');
 const arrow = document.createElement('div');
 const i = document.createElement('i');
+const avatar = document.querySelector('.avatar');
 
 // let start = Math.round(Math.random(0, 1) * 10);
 // let end = -Math.round(Math.random(0, 1) * 10);
@@ -36,7 +37,7 @@ const retrieveValuesFromDatas = (index) => {
   return object;
 };
 
-let { start, end } = retrieveValuesFromDatas(1);
+let { start, end } = retrieveValuesFromDatas(2);
 
 const removeDivs = () => {
   let floorDiv = document.querySelectorAll('.floor');
@@ -57,6 +58,7 @@ const createFloors = () => {
     // floor.textContent = `${i}`;
     let floorNum = createTextNode(`${i}`);
     append(floor, floorNum);
+    // floorNum.style.paddingLeft = '4px';
   }
 };
 
@@ -69,13 +71,19 @@ btn1.addEventListener('click', removeDivs);
 let groundFloor = document.querySelector('.floor0');
 let pos = groundFloor.offsetTop;
 
-const eleRect = groundFloor.getBoundingClientRect();
-const targetRect = ele.getBoundingClientRect();
+const getPositionOfElement = (element, target) => {
+  const eleRect = element.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+  const top = eleRect.top - targetRect.top;
+  return top;
+};
+let top = getPositionOfElement(groundFloor, rightCol);
 
-console.log(pos);
+console.log(pos, top);
 
 //* Position the road depending on ground floor
-road.style.top = `${pos + 40}px`;
+road.style.top = `${top + 80}px`;
+avatar.style.top = `${top - 100}px`;
 
 //* RANDOMIZATION FUNCTIONS OF VALUES DEPENDING ON RANGE
 function getRandomDs(min, max) {
@@ -120,16 +128,23 @@ const getAnimateFromTo = () => {
 
 let values = getAnimateFromTo();
 
-console.log(values);
-
+let floorDivs = [...document.querySelectorAll('.floor')];
 let startDiv = document.querySelector(`.floor${s}`);
 let endDiv = document.querySelector(`.floor${values.e}`);
 startDiv.style.color = 'green';
-startDiv.style.fontSize = '22px';
+// startDiv.style.backgroundColor = 'green';
 startDiv.style.fontWeight = 'bolder';
-endDiv.style.fontSize = '22px';
-endDiv.style.color = 'orangeRed';
+// endDiv.style.backgroundColor = 'orangeRed';
+endDiv.style.color = 'navyBlue';
 endDiv.style.fontWeight = 'bolder';
+
+//! SETTLE PADDING-LEFT OF TEXT CONTENT ON FLOORS
+floorDivs.forEach((floor) => {
+  let floorLevel = floor.textContent;
+  floorLevel >= 0
+    ? (floor.style.paddingLeft = '10px')
+    : (floor.style.paddingLeft = '5px');
+});
 
 arrow.style.top =
   `${values.dist}` < 0 ? `${values.to + 41}px` : `${values.from + 41}px`;
@@ -147,10 +162,6 @@ i.classList.add(
 i.style.position = 'absolute';
 i.style.left = 'calc(50% + 5px)';
 i.style.top = `calc(50% - ${Math.abs(values.dist) / 2}) `;
-// i.style.background = 'orange';
-// i.style.width = '30px';
-// i.style.height = '30px';
-// i.style.borderRadius = '50%';
 i.style.color = 'navy';
 i.style.lineHeight = '30px';
 
@@ -159,6 +170,7 @@ const createElevatorAnimation = () => {
     elevatorStart.style.display = 'block';
     elevatorStart.style.top = `${values.from}px`;
     boxAnimate.style.display = 'block';
+
     anime({
       targets: '.elevator',
       translateY: [`${values.from}`, `${values.to}`],
@@ -168,6 +180,31 @@ const createElevatorAnimation = () => {
     });
   }, 2000);
 };
+
+//? ANIMATE AVATAR
+anime({
+  targets: '.avatar ',
+  translateY: 50,
+  delay: anime.stagger(3000, { from: 'center' }),
+  loop: true,
+});
+
+//? FUNCTION FOR AVATAR : GO TO ELEVATOR START POSITION
+
+let startTopPos = getPositionOfElement(startDiv, groundFloor);
+console.log(startTopPos);
+const gotoElevator = () => {
+  anime({
+    targets: '.avatar',
+    keyframes: [{ translateX: -220 }, { translateY: `${startTopPos + 100}` }],
+    duration: 4000,
+    scale: 0.5,
+    easing: 'easeOutElastic(1, .8)',
+    forward: true,
+  });
+};
+gotoElevator();
+
 const btn2 = document.querySelector('#createAnimation');
 
 btn2.addEventListener('click', createElevatorAnimation);
