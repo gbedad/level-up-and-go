@@ -7,37 +7,47 @@
 }
 
 .right {
-  background-image: url("./assets/city.png");/*changer l'image*/
+  background-image: url("./assets/city.png");
   background-size: cover;
   height: 100%;
   z-index: 80;
 }
 
 
-.instruction, .correction{ /*copie des features du bootstrap input : voir ce qui peut etre enlevé pour alléger*/
+.instruction, .correction{ /*copie des features du bootstrap input et adaptation*/
   height: 80px;
   margin-top: 1rem!important;
   /* margin-bottom: 4rem!important; */
   min-height: calc(1.5em + 1rem + 2px);
   padding: .5rem 1rem;
-  font-size: 1.25rem;
+  font-size: 2rem;
+  font-family:'Roboto';
+  font-weight: 600;
+  text-align: center;
   border-radius: .3rem;
   display: block;
   width: 100%;
   font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
+  line-height: 1.75;
+  color: #073572;
   background-color: #fff;
   background-clip: padding-box;
   border: 5px solid orange/*#ced4da*/
 }
-.instruction, .correction { /*copie des features du bootstrap input : voir ce qui peut etre enlevé pour alléger*/
 
+.instruction, .correction { 
   margin-bottom: 4rem!important;
 }
 
 .attempt {
+  font-family: 'Roboto';
   height: 60px;
+  font-size: 1.75rem;
+  font-family:'Roboto';
+  font-weight: 600;
+  line-height: 1.75;
+  color: #073572;
+  text-align : center;
 }
 
 
@@ -58,6 +68,7 @@ color: /*#7ED957*/  #C9E265;
   width: 50px;
   height: 50px; 
 }
+
 .container {
   position: relative;
   margin: 0;
@@ -86,6 +97,19 @@ color: /*#7ED957*/  #C9E265;
   box-shadow: none !important;
 }
 
+/*Demander à Gérald puis à Dan pourquoi le style du placeholder ne fonctionne pas*/
+::placeholder { 
+  color: red;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: red;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: red;
+}
 
 .planeAnimation {
     -webkit-transform: translate(100px, -100px);
@@ -111,5 +135,4 @@ color: /*#7ED957*/  #C9E265;
 
 /*orange : #FF7F50*/
 /* vert #7ED957*/
-
 
