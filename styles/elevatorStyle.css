@@ -98,6 +98,5 @@ hr.dashed {
   .avatar {
     width: 150px;
     height:150px;
-    position: absolute;
     z-index: 100;
   }

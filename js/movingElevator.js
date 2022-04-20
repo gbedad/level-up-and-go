@@ -4,8 +4,16 @@ import myRanges from '../data/ranges.json' assert { type: 'json' };
 // import './showOperationMode.js';
 import { whichOperation } from './showAndCalculate.js';
 
-let myData = whichOperation(0, 2, 0);
+import { showCorrection } from './showCorrection.js';
+
+let myData = whichOperation(0, 3, 2);
 console.log(myData);
+
+let operationByAttempt = showCorrection(
+  [1, 2, 3, 4],
+  2,
+  myData.varShowOperation
+);
 
 //* GLOBAL VARIABLES
 
@@ -32,6 +40,8 @@ const road = document.querySelector('#road');
 const arrow = document.createElement('div');
 const i = document.createElement('i');
 const avatar = document.querySelector('.avatar');
+const avatar_btn = document.querySelector('.avatar');
+const showOperation = document.querySelector('.correction');
 
 // let start = Math.round(Math.random(0, 1) * 10);
 // let end = -Math.round(Math.random(0, 1) * 10);
@@ -68,6 +78,9 @@ const createFloors = () => {
 
 createFloors();
 
+const operation = createTextNode(`${operationByAttempt}`);
+append(showOperation, operation);
+
 const btn1 = document.querySelector('#removeDivs');
 
 btn1.addEventListener('click', removeDivs);
@@ -87,7 +100,9 @@ console.log(pos, top);
 
 //* Position the road depending on ground floor
 road.style.top = `${top + 80}px`;
-avatar.style.top = `${top - 100}px`;
+avatar_btn.style.top = `${top - 100}px`;
+avatar_btn.style.cursor = 'pointer';
+avatar_btn.classList.add('moving_btn');
 
 //* RANDOMIZATION FUNCTIONS OF VALUES DEPENDING ON RANGE
 function getRandomDs(min, max) {
@@ -144,11 +159,11 @@ console.log(values);
 let floorDivs = [...document.querySelectorAll('.floor')];
 let startDiv = document.querySelector(`.floor${myData.num1}`);
 let endDiv = document.querySelector(`.floor${values.e}`);
-startDiv.style.color = 'green';
+startDiv.style.color = 'yellowGreen';
 // startDiv.style.backgroundColor = 'green';
 startDiv.style.fontWeight = 'bolder';
 // endDiv.style.backgroundColor = 'orangeRed';
-endDiv.style.color = 'navyBlue';
+endDiv.style.color = 'orangeRed';
 endDiv.style.fontWeight = 'bolder';
 
 //! SETTLE PADDING-LEFT OF TEXT CONTENT ON FLOORS
@@ -175,7 +190,7 @@ i.classList.add(
 );
 i.style.position = 'absolute';
 i.style.left = 'calc(50% + 5px)';
-i.style.top = `calc(50% - ${Math.abs(values.dist) / 2}) `;
+i.style.top = `calc(50% - ${Math.abs(myData.num2) / 2}) `;
 i.style.color = 'navy';
 i.style.lineHeight = '30px';
 
@@ -184,11 +199,13 @@ const createElevatorAnimation = () => {
     elevatorStart.style.display = 'block';
     elevatorStart.style.top = `${values.from}px`;
     boxAnimate.style.display = 'block';
-
+    avatar.style.top = `${values.from}px`;
+    anime.remove(avatar_btn);
+    avatarInElevator();
     anime({
       targets: '.elevator',
       translateY: [`${values.from}`, `${values.to}`],
-      duration: Math.abs(1000 * `${ds}`),
+      duration: Math.abs(1000 * `${myData.num2}`),
       easing: 'easeInOutQuad',
       forward: true,
     });
@@ -196,31 +213,44 @@ const createElevatorAnimation = () => {
 };
 
 //? ANIMATE AVATAR
-anime({
-  targets: '.avatar ',
-  translateY: 50,
-  delay: anime.stagger(3000, { from: 'center' }),
-  loop: true,
-});
+const avatarAnimation = () => {
+  anime({
+    targets: '.moving_btn',
+    translateY: 20,
+    delay: 500,
+    direction: 'alternate',
+    loop: true,
+    easing: 'easeInOutSine',
+  });
+};
+avatarAnimation();
 
 //? FUNCTION FOR AVATAR : GO TO ELEVATOR START POSITION
 
+const avatarInElevator = () => {
+  append(boxAnimate, avatar);
+  avatar.style.top = `${values.from}px`;
+  avatar.style.width = '40px';
+  avatar.style.height = '40px';
+};
+
 let startTopPos = getPositionOfElement(startDiv, groundFloor);
 console.log(startTopPos);
-const gotoElevator = () => {
-  anime({
-    targets: '.avatar',
-    keyframes: [{ translateX: -220 }, { translateY: `${startTopPos + 100}` }],
-    duration: 4000,
-    scale: 0.5,
-    easing: 'easeOutElastic(1, .8)',
-    forward: true,
-  });
-};
-gotoElevator();
+// const gotoElevator = () => {
+//   anime({
+//     targets: avatar_btn,
+//     keyframes: [{ translateX: -220 }, { translateY: `${startTopPos + 100}` }],
+//     duration: 4000,
+//     scale: 0.5,
+//     easing: 'easeOutElastic(1, .8)',
+//     forward: true,
+//   });
+// };
+// gotoElevator();
 
 const btn2 = document.querySelector('#createAnimation');
 
-btn2.addEventListener('click', createElevatorAnimation);
+// btn2.addEventListener('click', createElevatorAnimation);
+avatar_btn.addEventListener('click', createElevatorAnimation);
 
 // document.getElementById('operation').innerHTML = `${s} + (${ds}) = ${values.e}`;
