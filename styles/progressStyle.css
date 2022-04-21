@@ -1,0 +1,123 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+#levelUp {
+text-align: center;
+font-size: 50px;
+margin: 0 0 2em 0;
+padding-top: 2em;
+color: #f4772a;
+font-family: 'Caveat', cursive;
+}
+.bg-img {
+    background-image: url("../assets/city.png");
+    background-size: cover;
+    height: 100%;
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+.background-opacity {
+    opacity: 0.5;
+}
+.full-visibility {
+    opacity: 1;
+}
+
+.stepper-wrapper {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    z-index: 99;
+  }
+  .stepper-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+  }
+  
+  .stepper-item::before {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid #ccc;
+    width: 100%;
+    top: 20px;
+    left: -50%;
+    z-index: 2;
+  }
+  
+  .stepper-item::after {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid #ccc;
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 2;
+  }
+  
+  .stepper-item .step-counter {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #ccc;
+    margin-bottom: 6px;
+  }
+.step-counter {
+    color: transparent;
+}
+  
+  .stepper-item.active {
+    font-weight: bold;
+  }
+  
+  .stepper-item.completed .step-counter {
+    background-color: orangered;
+    /* border: 2px solid orangered; */
+  }
+  
+  .stepper-item.completed::after {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid #8c52ff;
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 3;
+  }
+  
+  .stepper-item:first-child::before {
+    content: none;
+  }
+  .stepper-item:last-child::after {
+    content: none;
+  }
+
+  .rotate {
+    transform: rotate(-15deg); /* Équivalent à rotateZ(45deg) */
+  }
+  .avatar {
+      height: 200px;
+      z-index: 100;
+      position: relative;
+      top: 150px;
+
+  }

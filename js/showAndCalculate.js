@@ -40,6 +40,14 @@ function showOperation(showNum1, varOperator, showNum2) {
   //display the operation
   return `${showNum1} ${varOperator} ${showNum2} = ?`;
 }
+function showOperationWithResult(showNum1, num1, num2, varOperator, showNum2) {
+  //display the operation
+  return `${showNum1} ${varOperator} ${showNum2} = ${calculateComputerAnswer(
+    num1,
+    varOperator,
+    num2
+  )}`;
+}
 
 function calculateComputerAnswer(num1, operator, num2) {
   let result;
@@ -68,20 +76,27 @@ function whichOperation(l, s, t) {
   num1 = Number(numberNum(varSign1, num1));
   num2 = Number(numberNum(varSign2, num2));
   let varShowOperation = showOperation(showNum1, varOperator, showNum2);
+  let varShowOperationWithResult = showOperationWithResult(
+    showNum1,
+    num1,
+    num2,
+    varOperator,
+    showNum2
+  );
   let result = calculateComputerAnswer(num1, varOperator, num2);
-  exercise = { varShowOperation, num1, num2, result, min, max };
+
+  exercise = { varShowOperation,varShowOperationWithResult, num1, num2, result, min, max };
+
   return exercise;
 }
 
 function showCurrentQuestion(l, s, t) {
-  let operation=whichOperation(l,s,t)
+
+  let operation = whichOperation(l, s, t);
   let questionDiv = document.querySelector('.instruction');
-  let operationText = document.createTextNode(
-    operation.varShowOperation
-  );
+  let operationText = document.createTextNode(operation.varShowOperation);
   questionDiv.appendChild(operationText);
-  console.log(operation);
-  return operation
+  return operation;
 }
 /*console.log(showCurrentQuestion(0, 1, 0))*/
 function newQuestion(prev_l, prev_s, prev_t) { //l de la précédente, s de la précédente, etc. autres critères à ajouter 
@@ -92,11 +107,17 @@ function newQuestion(prev_l, prev_s, prev_t) { //l de la précédente, s de la p
   return {l,s,t} //si besoin autres features de la nouvelle question tirée à poser ?
 }
 
+const resultToExport = showCurrentQuestion(0, 1, 0);
+
+export default { resultToExport };
+
+
 //function questionTacker(){
 //questionTracker(l,s,t,num1, operator, num2, cumulAttempts, lastAnswerStatus)
 //critères changement de question dépendent l,s,t, cumulAttempts, lastAnswerStatus
 //}
 // console.log(result);
+
 
 //succession of attempts
 

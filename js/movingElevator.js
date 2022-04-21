@@ -4,15 +4,19 @@ import myRanges from '../data/ranges.json' assert { type: 'json' };
 // import './showOperationMode.js';
 import { whichOperation } from './showAndCalculate.js';
 
+import whatToDo from './showAndCalculate.js';
+
+console.log(whatToDo);
+
 import { showCorrection } from './showCorrection.js';
 
-let myData = whichOperation(0, 3, 2);
+let myData = whatToDo.resultToExport;
 console.log(myData);
 
 let operationByAttempt = showCorrection(
   [1, 2, 3, 4],
-  2,
-  myData.varShowOperation
+  3,
+  myData.varShowOperationWithResult
 );
 
 //* GLOBAL VARIABLES
@@ -184,9 +188,11 @@ append(building, arrow);
 append(arrow, i);
 i.classList.add('fa-solid');
 i.classList.add(
-  `${myData.num1}` > `${myData.result}`
-    ? 'fa-arrow-down-long'
-    : 'fa-arrow-up-long'
+  `${myData.num2}` == 0
+    ? 'fa-hand'
+    : `${myData.num1}` <= `${myData.result}` && `${myData.num2}` !== 0
+    ? 'fa-arrow-up-long'
+    : 'fa-arrow-down-long'
 );
 i.style.position = 'absolute';
 i.style.left = 'calc(50% + 5px)';
@@ -196,11 +202,11 @@ i.style.lineHeight = '30px';
 
 const createElevatorAnimation = () => {
   setTimeout(() => {
+    stopAnimation();
     elevatorStart.style.display = 'block';
     elevatorStart.style.top = `${values.from}px`;
     boxAnimate.style.display = 'block';
     avatar.style.top = `${values.from}px`;
-    anime.remove(avatar_btn);
     avatarInElevator();
     anime({
       targets: '.elevator',
@@ -224,6 +230,11 @@ const avatarAnimation = () => {
   });
 };
 avatarAnimation();
+
+const stopAnimation = () => {
+  anime.set('.moving_btn', { top: 0 });
+  anime.remove('.moving_btn');
+};
 
 //? FUNCTION FOR AVATAR : GO TO ELEVATOR START POSITION
 
