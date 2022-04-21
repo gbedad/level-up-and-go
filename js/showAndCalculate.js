@@ -4,14 +4,10 @@ let level = 0;
 let subLevel = 0;
 let questionType = 0;
 let currentQuestion = 0;
-let nextQuestion;
-let operation; //inutile ?
-let par; //inutile ?
-let sign; //inutile ?
-let rangeMin; //inutile ?
-let rangeMax; //inutile ?
+let exercise = {};
 
-//add condition
+
+//add condition on
 
 function randomNum(rangeMin, rangeMax) {
   let num = Math.floor(Math.random() * (rangeMax - rangeMin)) + rangeMin;
@@ -88,33 +84,40 @@ function whichOperation(l, s, t) {
     showNum2
   );
   let result = calculateComputerAnswer(num1, varOperator, num2);
-  let exercise = {
-    varShowOperation,
-    varShowOperationWithResult,
-    num1,
-    num2,
-    result,
-    min,
-    max,
-  };
+
+  exercise = { varShowOperation,varShowOperationWithResult, num1, num2, result, min, max };
+
   return exercise;
 }
 
 function showCurrentQuestion(l, s, t) {
+
   let operation = whichOperation(l, s, t);
   let questionDiv = document.querySelector('.instruction');
   let operationText = document.createTextNode(operation.varShowOperation);
   questionDiv.appendChild(operationText);
   return operation;
 }
-
-function changeCurrentQuestion(l, s, t) {
-  currentQuestion = '';
+/*console.log(showCurrentQuestion(0, 1, 0))*/
+function newQuestion(prev_l, prev_s, prev_t) { //l de la précédente, s de la précédente, etc. autres critères à ajouter 
+  let l = 0; // à revoir en fonction de la progression
+  let s = 0; // à revoir en fonction de la progression
+  let t = 0; // à revoir en fonction de la progression
   showCurrentQuestion(l, s, t);
+  return {l,s,t} //si besoin autres features de la nouvelle question tirée à poser ?
 }
+
 const resultToExport = showCurrentQuestion(0, 1, 0);
 
 export default { resultToExport };
+
+
+//function questionTacker(){
+//questionTracker(l,s,t,num1, operator, num2, cumulAttempts, lastAnswerStatus)
+//critères changement de question dépendent l,s,t, cumulAttempts, lastAnswerStatus
+//}
+// console.log(result);
+
 
 //succession of attempts
 
@@ -136,10 +139,10 @@ let currentInput = document.querySelector('.attempt'); ////à revoir après int�
 // showCurrentQuestion();
 
 function showExpectation(currentInput) {
-  currentInput.placeholder = '6 + 7 = ...'; //
+  currentInput.placeholder = `${showCorrection3}...`;
 }
-showExpectation(currentInput);
 
+/*
 function createIcon(answer) {
   let iconPlace = document.querySelector('.icon');
   let iconDiv = document.createElement('i');
@@ -154,28 +157,27 @@ function createIcon(answer) {
     iconToAdd.add('fa-check');
   }
 }
-createIcon(true);
 
-function createNewAttemptBox() {
-  let newAttemptPlace = document.querySelector('.attempt2');
+function createNewAttemptBox(attemptNumber) {
+  let newAttemptPlace = document.querySelector(`#answerAttempt${attemptNumber}`);
   let newAttemptBox = document.createElement('input');
   newAttemptPlace.appendChild(newAttemptBox);
   const newBoxToAdd = newAttemptBox.classList;
   newBoxToAdd.add('form-control');
-  newBoxToAdd.add('attempt');
+  newBoxToAdd.add(`#inputAttempt${attemptNumber}`);
   newBoxToAdd.add('form-control-lg');
   newBoxToAdd.add('my-3');
 }
-createNewAttemptBox();
 
-function createNewButton() {
-  let newButtonPlace = document.querySelector('.submission');
+
+function createNewButton(attemptNumber) {
+  let newButtonPlace = document.querySelector(`#colBtnAttempt${attemptNumber}`);
   let newButtonInput = document.createElement('button');
   newButtonPlace.appendChild(newButtonInput);
   newButtonInput.setAttribute('type', 'submit');
   const newButtonToAdd = newButtonInput.classList;
   newButtonToAdd.add('btn');
-
+  newButtonToAdd.add(`btnAttempt${attemptNumber}`);
   let newPlaneImage = document.createElement('img');
   newButtonInput.appendChild(newPlaneImage);
   newPlaneImage.setAttribute(
@@ -184,12 +186,77 @@ function createNewButton() {
   );
   newPlaneImage.setAttribute('id', 'plane');
   newPlaneImage.setAttribute('onclick', 'planeAnim();');
-}
-createNewButton();
 
-function falseAttempt() {
-  createIncon(false);
-  createNewAttemptBox();
 }
+
+function clearAttempts (){
+//
+}
+
+function showOtherBoxAttempt(attemptNumber) {
+    createIcon(false);
+    createNewAttemptBox(attemptNumber);
+    createNewButton(attemptNumber);
+}
+*/
+
+
+function analyzeAnswer (fct) {
+    let datas=fct();
+    console.log(datas.userAnswerAttempt, datas.computerAnswer)
+    if(datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber<4){
+    datas.attemptNumber=datas.attemptNumber+1;
+    return false
+  } else { //correct result or attempt4 false result
+    console.log('bonne réponse')
+    //change questionType
+    //attemptNumber=1;
+    return true
+  }
+}
+
+
+
+function playTheQuestion(){
+
+  function getinput () {
+    let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
+    let attemptNumber=1; //initialisation des tentatives
+    let currentButton = document.querySelector(`.btnAttempt${attemptNumber}`);
+    let currentInput = document.querySelector(`#inputAttempt${attemptNumber}`);
+    let userAnswerAttempt = currentInput.value;
+    let computerAnswer = currentQuestion.result;
+    return {
+      userAnswerAttempt: userAnswerAttempt,
+      attemptNumber: attemptNumber,
+      computerAnswer: computerAnswer,
+      currentButton: currentButton
+    }
+    }
+
+  let datas = getinput();
+
+  let userAnswerAttempt= datas.userAnswerAttempt
+  let attemptNumber= datas.attemptNumber
+  let computerAnswer= datas.computerAnswer
+  let currentButton= datas.currentButton
+ 
+currentButton.addEventListener('click', () => analyzeAnswer(getinput))
+}
+
+ 
+
+
+
+playTheQuestion();
+
+
 
 export { whichOperation };
+
+
+
+
+
+
+
