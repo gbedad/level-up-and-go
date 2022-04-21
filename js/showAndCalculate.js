@@ -44,6 +44,14 @@ function showOperation(showNum1, varOperator, showNum2) {
   //display the operation
   return `${showNum1} ${varOperator} ${showNum2} = ?`;
 }
+function showOperationWithResult(showNum1, num1, num2, varOperator, showNum2) {
+  //display the operation
+  return `${showNum1} ${varOperator} ${showNum2} = ${calculateComputerAnswer(
+    num1,
+    varOperator,
+    num2
+  )}`;
+}
 
 function calculateComputerAnswer(num1, operator, num2) {
   let result;
@@ -72,25 +80,41 @@ function whichOperation(l, s, t) {
   num1 = Number(numberNum(varSign1, num1));
   num2 = Number(numberNum(varSign2, num2));
   let varShowOperation = showOperation(showNum1, varOperator, showNum2);
+  let varShowOperationWithResult = showOperationWithResult(
+    showNum1,
+    num1,
+    num2,
+    varOperator,
+    showNum2
+  );
   let result = calculateComputerAnswer(num1, varOperator, num2);
-  let exercise = { varShowOperation, num1, num2, result, min, max };
+  let exercise = {
+    varShowOperation,
+    varShowOperationWithResult,
+    num1,
+    num2,
+    result,
+    min,
+    max,
+  };
   return exercise;
 }
 
 function showCurrentQuestion(l, s, t) {
+  let operation = whichOperation(l, s, t);
   let questionDiv = document.querySelector('.instruction');
-  let operationText = document.createTextNode(
-    whichOperation(l, s, t).varShowOperation
-  );
+  let operationText = document.createTextNode(operation.varShowOperation);
   questionDiv.appendChild(operationText);
+  return operation;
 }
 
 function changeCurrentQuestion(l, s, t) {
   currentQuestion = '';
   showCurrentQuestion(l, s, t);
 }
-changeCurrentQuestion(0, 1, 0);
-// console.log(result);
+const resultToExport = showCurrentQuestion(0, 1, 0);
+
+export default { resultToExport };
 
 //succession of attempts
 
