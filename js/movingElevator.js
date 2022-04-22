@@ -10,16 +10,19 @@ console.log(whatToDo.attemptToExport);
 
 import { showCorrection } from './showCorrection.js';
 
+//* GLOBAL VARIABLES
+// Global variable for storing operation display
+let newAttempt;
 let myData = whatToDo.currentQuestion;
 console.log(myData);
-
+let setStartColor;
+let setEndColor;
+console.log(JSON.parse(localStorage.getItem('attempt')));
 let operationByAttempt = showCorrection(
-  whatToDo.attemptToExport,
+  JSON.parse(localStorage.getItem('attempt')),
   myData.varShowOperationWithResult
 );
-
-
-//* GLOBAL VARIABLES
+console.log(operationByAttempt);
 
 //? Functions for dom elements creation
 function createNode(element) {
@@ -82,16 +85,45 @@ const createFloors = () => {
 
 createFloors();
 
-
 const updateAttempts = () => {
   const operation = createTextNode(`${operationByAttempt}`);
-append(showOperation, operation);
-}
-updateAttempts()
+  append(showOperation, operation);
+};
+updateAttempts();
+console.log(showOperation.textContent);
+// Get value from localStorage
+const getUpdatesFromLocalStorage = () => {
+  newAttempt = JSON.parse(localStorage.getItem('attempt'));
+  console.log(newAttempt);
+  operationByAttempt = showCorrection(
+    newAttempt,
+    myData.varShowOperationWithResult
+  );
+  console.log(operationByAttempt);
+  showOperation.textContent = operationByAttempt;
+  if (newAttempt <= 3) {
+    setStartColor = 'yellowGreen';
+  }
+  if (newAttempt > 2 && newAttempt < 4) {
+    showArrow();
+  }
+  if (newAttempt == 4) {
+    setEndColor = 'red';
+    setStartColor = 'yellowGreen';
+    showArrow();
+    createElevatorAnimation();
+  }
+  changeColor();
+  console.log(setEndColor, setStartColor);
+  return newAttempt;
+};
 
+setInterval(() => (newAttempt = getUpdatesFromLocalStorage()), 5000);
+
+console.log(newAttempt);
 const btn1 = document.querySelector('#removeDivs');
 
-btn1.addEventListener('click', removeDivs);
+btn1.addEventListener('click', getUpdatesFromLocalStorage);
 
 let groundFloor = document.querySelector('.floor0');
 let pos = groundFloor.offsetTop;
@@ -163,16 +195,19 @@ const getAnimateFromTo = () => {
 
 let values = getAnimateFromTo();
 console.log(values);
-
+console.log(newAttempt);
 let floorDivs = [...document.querySelectorAll('.floor')];
 let startDiv = document.querySelector(`.floor${myData.num1}`);
 let endDiv = document.querySelector(`.floor${values.e}`);
-startDiv.style.color = 'yellowGreen';
+const changeColor = () => {
+  startDiv.style.color = `${setStartColor}`;
+
+  endDiv.style.color = `${setEndColor}`;
+};
+
 // startDiv.style.backgroundColor = 'green';
-startDiv.style.fontWeight = 'bolder';
+
 // endDiv.style.backgroundColor = 'orangeRed';
-endDiv.style.color = 'orangeRed';
-endDiv.style.fontWeight = 'bolder';
 
 //! SETTLE PADDING-LEFT OF TEXT CONTENT ON FLOORS
 floorDivs.forEach((floor) => {
@@ -182,9 +217,11 @@ floorDivs.forEach((floor) => {
     : (floor.style.paddingLeft = '5px');
 });
 
-arrow.style.top = `${values.to + 41}px`;
+const showArrow = () => {
+  arrow.style.top = `${values.to + 41}px`;
+  arrow.style.height = `${values.dist}px`;
+};
 
-arrow.style.height = `${values.dist}px`;
 //   `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
 
 arrow.classList.add('ve-line');
@@ -233,7 +270,7 @@ const avatarAnimation = () => {
     easing: 'easeInOutSine',
   });
 };
-avatarAnimation();
+// avatarAnimation();
 
 const stopAnimation = () => {
   anime.set('.moving_btn', { top: 0 });
