@@ -6,18 +6,18 @@ import { whichOperation } from './showAndCalculate.js';
 
 import whatToDo from './showAndCalculate.js';
 
-console.log(whatToDo);
+console.log(whatToDo.attemptToExport);
 
 import { showCorrection } from './showCorrection.js';
 
-let myData = whatToDo.resultToExport;
+let myData = whatToDo.currentQuestion;
 console.log(myData);
 
 let operationByAttempt = showCorrection(
-  [1, 2, 3, 4],
-  3,
+  whatToDo.attemptToExport,
   myData.varShowOperationWithResult
 );
+
 
 //* GLOBAL VARIABLES
 
@@ -82,8 +82,12 @@ const createFloors = () => {
 
 createFloors();
 
-const operation = createTextNode(`${operationByAttempt}`);
+
+const updateAttempts = () => {
+  const operation = createTextNode(`${operationByAttempt}`);
 append(showOperation, operation);
+}
+updateAttempts()
 
 const btn1 = document.querySelector('#removeDivs');
 

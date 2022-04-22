@@ -3,8 +3,14 @@ import dataSet from '../data/setOfData.json' assert { type: 'json' };
 let level = 0;
 let subLevel = 0;
 let questionType = 0;
-let currentQuestion = 0;
+//let currentQuestion = 0;
 let exercise = {};
+let attemptToExport = 1
+
+let userAnswerAttempta
+  let attemptNumbera
+  let computerAnswera
+  let currentButton
 
 
 //add condition on
@@ -89,11 +95,11 @@ function whichOperation(l, s, t) {
 
   return exercise;
 }
-
+let questionDiv = document.querySelector('.instruction');
 function showCurrentQuestion(l, s, t) {
 
   let operation = whichOperation(l, s, t);
-  let questionDiv = document.querySelector('.instruction');
+  
   let operationText = document.createTextNode(operation.varShowOperation);
   questionDiv.appendChild(operationText);
   return operation;
@@ -107,9 +113,10 @@ function newQuestion(prev_l, prev_s, prev_t) { //l de la précédente, s de la p
   return {l,s,t} //si besoin autres features de la nouvelle question tirée à poser ?
 }
 
-const resultToExport = showCurrentQuestion(0, 1, 0);
+//const resultToExport = showCurrentQuestion(0, 1, 0);
 
-export default { resultToExport };
+
+
 
 
 //function questionTacker(){
@@ -201,11 +208,12 @@ function showOtherBoxAttempt(attemptNumber) {
 */
 
 
-function analyzeAnswer (fct) {
+/*function analyzeAnswer (fct) {
     let datas=fct();
     console.log(datas.userAnswerAttempt, datas.computerAnswer)
     if(datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber<4){
     datas.attemptNumber=datas.attemptNumber+1;
+    
     return false
   } else { //correct result or attempt4 false result
     console.log('bonne réponse')
@@ -213,19 +221,20 @@ function analyzeAnswer (fct) {
     //attemptNumber=1;
     return true
   }
-}
+}*/
 
+const currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
 
-
-function playTheQuestion(){
-
+function playTheAttempt(attemptNumber){
+ 
   function getinput () {
-    let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
-    let attemptNumber=1; //initialisation des tentatives
+    //let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
+    //let attemptNumber=1; //initialisation des tentatives
     let currentButton = document.querySelector(`.btnAttempt${attemptNumber}`);
-    let currentInput = document.querySelector(`#inputAttempt${attemptNumber}`);
+    let currentInput = document.querySelector(`.inpAttempt${attemptNumber}`);
     let userAnswerAttempt = currentInput.value;
     let computerAnswer = currentQuestion.result;
+    console.log(currentButton)
     return {
       userAnswerAttempt: userAnswerAttempt,
       attemptNumber: attemptNumber,
@@ -236,27 +245,129 @@ function playTheQuestion(){
 
   let datas = getinput();
 
-  let userAnswerAttempt= datas.userAnswerAttempt
-  let attemptNumber= datas.attemptNumber
-  let computerAnswer= datas.computerAnswer
-  let currentButton= datas.currentButton
- 
+
+  userAnswerAttempta= datas.userAnswerAttempt
+  attemptNumbera= datas.attemptNumber
+ computerAnswera= datas.computerAnswer
+  currentButton= datas.currentButton
+
 currentButton.addEventListener('click', () => analyzeAnswer(getinput))
 }
 
  
 
 
+ function playTheQuestion(){
+    let attemptNumber=1; 
+    
+      playTheAttempt(attemptNumber);
+   
+    
+   /* doplayTheAttempt(attemptNumber);{
+    playTheAttempt(attemptNumber);
+    attemptNumber=attemptNumber+1;
+    } while()*/
+  }
 
-playTheQuestion();
-
+  playTheQuestion()
 
 
 export { whichOperation };
 
+/*
+_________________________*/
 
+  function show(a, b){
+    let i = document.createElement("i")
+    /*let feedback = document.querySelector(`${a}, .attempt${b}`);*/
+    let feedback = document.querySelector(`.attempt${b}`);
+    const newIcon = feedback.appendChild(i)
+    /*const newClassToAdd = feedback.classList;*/
+    const newClassToAdd = newIcon.classList
+    newClassToAdd.add(`fa-solid`);
+    newClassToAdd.add(`${a}`);
+    newClassToAdd.add('isShown');
+    feedback.classList.remove('isHidden');
+    console.log(feedback)
+  }
 
+  function showBtn(b){
+    let feedback = document.querySelector(`.btnAttempt${b+1}`);
+    const newClassToAdd = feedback.classList;
+    newClassToAdd.add('isShown');
+    feedback.classList.remove('isHidden');
+  }
 
+  function showInp(b){
+    let feedback = document.querySelector(`.inpAttempt${b+1}`);
+    const newClassToAdd = feedback.classList;
+    newClassToAdd.add('isShown');
+    feedback.classList.remove('isHidden');
+  }
 
+ function analyzeAnswer (fct) {
+      let datas=fct();
+      console.log(datas.userAnswerAttempt, datas.computerAnswer, datas.attemptNumber)
+      if(datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber<4){
+      //affichage croix datas.attemptNumber
+      show(`fa-xmark`,datas.attemptNumber);
+      //affichage input et bouton datas.attemptNumber+1
+      showInp(datas.attemptNumber);
+      showBtn(datas.attemptNumber);
+      //correction n° datas.attemptNumber
+      datas.attemptNumber=datas.attemptNumber+1;
+      
+      playTheAttempt(datas.attemptNumber)
+      //return false
+      attemptToExport = datas.attemptNumber
+      console.log("======> Where ?", attemptToExport)
+      return attemptToExport
+      } else if (datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber==4){
+      //affichage croix datas.attemptNumber (4)
+      show('fa-xmark',datas.userAnswerAttempt);
+    //correction n° datas.attemptNumber (4)
+    playTheQuestion()
+      //return false
+      } else if (datas.userAnswerAttempt==datas.computerAnswer) {
+      //affichage check datas.attemptNumber (4)
+      show('fa-check',datas.attemptNumber);
+      //correction n° datas.attemptNumber (4)
+      console.log("Data is correct")
+      location.reload()
+      showCurrentQuestion(0,1,0)
 
+      playTheQuestion()
+
+      //return true
+    }
+    }
+console.log(attemptToExport)
+export default { currentQuestion, attemptToExport };
+
+ /* function playTheAttempt(attemptNumber){
+console.log(attemptNumber)
+    function getinput () {
+    let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
+    //let attemptNumber=1; initialisation des tentatives
+    let currentButton = document.querySelector(`.btnAttempt${attemptNumber}`);
+    let currentInput = document.querySelector(`#inputAttempt${attemptNumber}`);
+    //let userAnswerAttempt = currentInput.value;
+    let computerAnswer = currentQuestion.result;
+    return {
+      //userAnswerAttempt: userAnswerAttempt,
+      attemptNumber: attemptNumber,
+      computerAnswer: computerAnswer,
+      currentButton: currentButton
+    }
+    }
+    let datas = getinput();
+    /*let userAnswerAttempt= datas.userAnswerAttempt
+    let attemptNumber= datas.attemptNumber
+    let computerAnswer= datas.computerAnswer*/
+/*    let currentButton= datas.currentButton*/
+ 
+   /* currentButton.addEventListener('click', () => analyzeAnswer(getinput, ))
+    }*/
+
+   
 

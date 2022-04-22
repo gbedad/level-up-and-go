@@ -1,7 +1,7 @@
-const showCorrection = (arrayOfAttempts, index, operation) => {
+const showCorrection = (attemptNumber, operation) => {
   let stringOperation = operation.toString();
   console.log(stringOperation);
-  switch (arrayOfAttempts[index]) {
+  switch (attemptNumber) {
     case 1:
       return `${stringOperation
         .substring(0, stringOperation.indexOf(' '))
