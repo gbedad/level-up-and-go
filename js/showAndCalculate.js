@@ -170,14 +170,14 @@ function showCurrentQuestion(l, s, t) {
   return operation;
 }
 /*console.log(showCurrentQuestion(0, 1, 0))*/
-function newQuestion(prev_l, prev_s, prev_t) {
-  //l de la précédente, s de la précédente, etc. autres critères à ajouter
-  let l = 0; // à revoir en fonction de la progression
-  let s = 0; // à revoir en fonction de la progression
-  let t = 0; // à revoir en fonction de la progression
-  showCurrentQuestion(l, s, t);
-  return { l, s, t }; //si besoin autres features de la nouvelle question tirée à poser ?
-}
+// function newQuestion(prev_l, prev_s, prev_t) {
+//   //l de la précédente, s de la précédente, etc. autres critères à ajouter
+//   let l = 0; // à revoir en fonction de la progression
+//   let s = 0; // à revoir en fonction de la progression
+//   let t = 0; // à revoir en fonction de la progression
+//   showCurrentQuestion(l, s, t);
+//   return { l, s, t }; //si besoin autres features de la nouvelle question tirée à poser ?
+// }
 
 //const resultToExport = showCurrentQuestion(0, 1, 0);
 
@@ -283,7 +283,8 @@ function showOtherBoxAttempt(attemptNumber) {
   }
 }*/
 
-const currentQuestion = showCurrentQuestion(4, 0, 0); //initialisation et test => à revoir
+//initialisation et test => à revoir
+let currentQuestion = showCurrentQuestion(0, 0, 0);
 
 function playTheAttempt(attemptNumber) {
   function getinput() {
@@ -449,21 +450,20 @@ console.log(attemptNumber)
 /* currentButton.addEventListener('click', () => analyzeAnswer(getinput, ))
     }*/
 
-nextQuestion = [2, 0, 0];
-let l = nextQuestion[0];
-let s = nextQuestion[1];
-let t = nextQuestion[2];
+let l = 0;
+let s = 0;
+let t = 0;
 
-showCurrentQuestion(l, s, t);
+//showCurrentQuestion(l, s, t);
 
 //bouton apparaît si juste ou si attempt4
 let btnChange = document.querySelector('.change');
-nextQuestion = defineNextQuestion(l, s, t);
-l = nextQuestion[0];
-s = nextQuestion[1];
-t = nextQuestion[2];
-btnChange.addEventListener('click', () => console.log(nextQuestion));
-showCurrentQuestion(l, s, t);
+//nextQuestion = defineNextQuestion(l, s, t);
+// l = nextQuestion[0];
+// s = nextQuestion[1];
+// t = nextQuestion[2];
+btnChange.addEventListener('click', () => defineNextQuestion(l, s, t));
+//currentQuestion = showCurrentQuestion(l, s, t);
 
 function defineNextQuestion(l, s, t) {
   //currentQuestion = showCurrentQuestion(l,s,t);
@@ -484,5 +484,39 @@ function defineNextQuestion(l, s, t) {
       }
     }
   }
+  clearPreviousQuestion();
+  showCurrentQuestion(l, s, t);
+  playTheQuestion();
   return [l, s, t];
 }
+
+// Clear the previous question
+
+const clearPreviousQuestion = () => {
+  let shownButtons = document.querySelectorAll('.btnAttempt');
+  let shownButton1 = document.querySelector('.btnAttempt1');
+  let shownButton2 = document.querySelector('.btnAttempt2');
+  let shownButton3 = document.querySelector('.btnAttempt3');
+  let shownButton4 = document.querySelector('.btnAttempt4');
+  let a1 = shownButton1.classList;
+  let a2 = shownButton2.classList;
+  let a3 = shownButton3.classList;
+  let a4 = shownButton4.classList;
+  shownButton1.disabled = false;
+  a2.add('isHidden');
+  a2.remove('isShown');
+  a3.add('isHidden');
+  a3.remove('isShown');
+  a4.add('isHidden');
+  a4.remove('isShown');
+  let inputs = document.querySelectorAll('.attempt');
+  let icons = document.querySelectorAll('i');
+  questionDiv.textContent = '';
+  icons.forEach((el) => el.remove());
+  inputs.forEach((el) => (el.value = ''));
+
+  for (let i = 1; i < 4; i++) {
+    inputs[i].classList.add('isHidden');
+    inputs[i].classList.remove('isShown');
+  }
+};
