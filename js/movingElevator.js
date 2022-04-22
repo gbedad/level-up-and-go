@@ -17,9 +17,12 @@ let myData = whatToDo.currentQuestion;
 console.log(myData);
 let setStartColor;
 let setEndColor;
-console.log(JSON.parse(localStorage.getItem('attempt')));
+// console.log(JSON.parse(localStorage.getItem('resultsFromUser')).attempt);
+let retrievedObject = localStorage.getItem('resultsFromUser');
+let result = JSON.parse(retrievedObject);
+console.log(result);
 let operationByAttempt = showCorrection(
-  JSON.parse(localStorage.getItem('attempt')),
+  result.attempt,
   myData.varShowOperationWithResult
 );
 console.log(operationByAttempt);
@@ -93,14 +96,23 @@ updateAttempts();
 console.log(showOperation.textContent);
 // Get value from localStorage
 const getUpdatesFromLocalStorage = () => {
-  newAttempt = JSON.parse(localStorage.getItem('attempt'));
-  console.log(newAttempt);
+  let retrievedObject = localStorage.getItem('resultsFromUser');
+  let result = JSON.parse(retrievedObject);
+  newAttempt = result.attempt;
+  console.log(result);
   operationByAttempt = showCorrection(
     newAttempt,
     myData.varShowOperationWithResult
   );
   console.log(operationByAttempt);
   showOperation.textContent = operationByAttempt;
+  if (result.computerAns == result.userAnswerAtt && newAttempt <= 4) {
+    showOperation.textContent = `${myData.varShowOperationWithResult}`;
+    clearInterval(myInterval);
+    changeColor();
+    showArrow();
+    createElevatorAnimation();
+  }
   if (newAttempt <= 3) {
     setStartColor = 'yellowGreen';
   }
@@ -110,6 +122,7 @@ const getUpdatesFromLocalStorage = () => {
   if (newAttempt == 4) {
     setEndColor = 'red';
     setStartColor = 'yellowGreen';
+    clearInterval(myInterval);
     showArrow();
     createElevatorAnimation();
   }
@@ -118,7 +131,7 @@ const getUpdatesFromLocalStorage = () => {
   return newAttempt;
 };
 
-setInterval(() => (newAttempt = getUpdatesFromLocalStorage()), 5000);
+const myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
 
 console.log(newAttempt);
 const btn1 = document.querySelector('#removeDivs');
@@ -256,7 +269,7 @@ const createElevatorAnimation = () => {
       easing: 'easeInOutQuad',
       forward: true,
     });
-  }, 2000);
+  }, 500);
 };
 
 //? ANIMATE AVATAR

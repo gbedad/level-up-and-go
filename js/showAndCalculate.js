@@ -7,17 +7,21 @@ let questionType = 0;
 let exercise = {};
 let attemptToExport;
 
-let userAnswerAttempta;
+let userAnswerAtt;
 let attemptNum = 0;
-let computerAnswera;
+let computerAns;
 let currentButton;
+let resultsFormInputs = {
+  userAnswerAtt: 0,
+  computerAns: 1,
+  attempt: attemptNum,
+};
 
-localStorage.setItem(
-  'attempt',
-  JSON.stringify({ attemptNum, computerAnswera, userAnswerAttempta })
-);
-
+localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
+console.log(resultsFormInputs);
 //add condition on
+const resultRetrieved = localStorage.getItem('resultsFromUser');
+const result = JSON.parse(resultRetrieved);
 
 function randomNum(rangeMin, rangeMax) {
   let num = Math.floor(Math.random() * (rangeMax - rangeMin)) + rangeMin;
@@ -300,9 +304,9 @@ function playTheAttempt(attemptNumber) {
 
   let datas = getinput();
 
-  userAnswerAttempta = datas.userAnswerAttempt;
+  userAnswerAtt = datas.userAnswerAttempt;
   attemptNum = datas.attemptNumber;
-  computerAnswera = datas.computerAnswer;
+  computerAns = datas.computerAnswer;
   currentButton = datas.currentButton;
 
   currentButton.addEventListener('click', () => analyzeAnswer(getinput));
@@ -341,10 +345,17 @@ function show(a, b) {
 }
 
 function showBtn(b) {
+  const resultRetrieved = localStorage.getItem('resultsFromUser');
+  const result = JSON.parse(resultRetrieved);
+  console.log(result);
   let feedback = document.querySelector(`.btnAttempt${b + 1}`);
   const newClassToAdd = feedback.classList;
   newClassToAdd.add('isShown');
   feedback.classList.remove('isHidden');
+  document.querySelector(`.btnAttempt${b}`).disabled = true;
+  if (result.computerAns == result.userAnswerAtt) {
+    document.querySelector(`.btnAttempt${b}`).disabled = true;
+  }
 }
 
 function showInp(b) {
@@ -361,6 +372,14 @@ function analyzeAnswer(fct) {
     datas.computerAnswer,
     datas.attemptNumber
   );
+  resultsFormInputs = {
+    userAnswerAtt: datas.userAnswerAttempt,
+    computerAns: datas.computerAnswer,
+    attempt: datas.attemptNumber,
+  };
+
+  localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
+
   if (
     datas.userAnswerAttempt != datas.computerAnswer &&
     datas.attemptNumber < 4
@@ -376,7 +395,7 @@ function analyzeAnswer(fct) {
     playTheAttempt(datas.attemptNumber);
 
     //return false
-    localStorage.setItem('attempt', JSON.stringify(datas.attemptNumber));
+
     // console.log('======> Where ?', attemptToExport);
     return attemptToExport;
   } else if (
@@ -395,9 +414,9 @@ function analyzeAnswer(fct) {
     //correction n° datas.attemptNumber (4)
     console.log('Data is correct');
     // location.reload();
-    showCurrentQuestion(0, 1, 0);
+    // showCurrentQuestion(0, 1, 0);
 
-    playTheQuestion();
+    // playTheQuestion();
 
     //return true
   }
