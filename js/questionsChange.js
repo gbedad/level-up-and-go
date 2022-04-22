@@ -1,33 +1,64 @@
-question terminée
-level1
-souslevel1
-questionType1
 
-question à venir
-si dernière tentative fausse
-	level1  //idem
-	souslevel1
-	questionType1
-sinon
-	level1
-	souslevel2
-	questionType1
+/*changeQuestionWithinSublevel
+	(l,s,0) obligatoire
+	trueMin
+	tirage autre question dans sublevel
+
+Passer d'un sublevel à un autre
+Passer d'un level à un autre*/
+
+rules
+//{"questionDrawWithinSubLevel": "randomize"}//tant que trueMinWithinSublevel pas atteint
+//conditions to get out from l,s: 
+//quid if non OK soustraction and addition sortie
+let rules = [{"trueMinWithinSublevel":0}/*,{"trueSuccMinWithinSublevel":0}*/];
+
+function findRules(l,s){
+if (l<5){
+	rules=[{"trueMinWithinSublevel":2}/*,{"trueSuccMinWithinSublevel":2}*/]
+	else {
+		rules=[{"trueMinWithinSublevel":3}/*,{"trueSuccMinWithinSublevel":2}*/]
+	}
+	return rules
+}
+
+let trueAnswersWithinSublevel = 0;
+let currentQuestionAnswer = true;
 
 
-question terminée
-level1
-souslevel2
-questionType1
+questionTracker:[0,true],[1, false]
 
-question à venir
-si dernière tentative fausse
-	level1//idem
-	souslevel2
-	questionType1
-sinon
-	level1
-	souslevel2
-	questionType1
+
+function defineNextQuestion(l,s,t){
+  //currentQuestion = showCurrentQuestion(l,s,t);
+  //quand répondu à la question (soit jusqu'à 4 soit juste)
+  if(dataSet[l][s][t].questionType<dataSet[l][s].length && currentQuestionAnswer){
+  	if (trueAnswersWithinSublevel<findRules(l,s)[0].trueMinWithinSublevel){
+  	t=randomNum(0, dataSet[l][s].length)
+  	} 
+  } else {
+    if(dataSet[l][s][t].sublevel<dataSet[l].length){
+    s=s+1;
+    t=0
+    } else {
+      if(dataSet[l][s][t].level<dataSet[l].length) {
+      l=l+1;
+      t=0;
+      s=0;
+      } else {
+        console.log("congrats")
+      }
+    }
+    }
+  return [l,s,t]
+  }
+
+
+
+
+
+
+_______
 
 l=0;
 s=0;
