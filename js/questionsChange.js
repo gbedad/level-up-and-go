@@ -1,13 +1,6 @@
 
-/*changeQuestionWithinSublevel
-	(l,s,0) obligatoire
-	trueMin
-	tirage autre question dans sublevel
 
-Passer d'un sublevel à un autre
-Passer d'un level à un autre*/
-
-rules
+//rules
 //{"questionDrawWithinSubLevel": "randomize"}//tant que trueMinWithinSublevel pas atteint
 //conditions to get out from l,s: 
 //quid if non OK soustraction and addition sortie
@@ -57,41 +50,33 @@ function defineNextQuestion(l,s,t){
 
 
 
+showCurrentQuestion(0, 0, 0);
 
-_______
-
-l=0;
-s=0;
-t=0;
-showCurrentQuestion(0,0,0);
 
 //bouton apparaît si juste ou si attempt4
-let btnChange=document.querySelector('.change')
-let nextQuestion = defineNextQuestion(l,s,t);
-btnChange.addEventListener("click", ()=>console.log(nextQuestion))
-showCurrentQuestion(nextQuestion[0],nextQuestion[1],nextQuestion[2]);
+let btnChange = document.querySelector('.change');
+let nextQuestion = defineNextQuestion(l, s, t);
+btnChange.addEventListener('click', () => console.log(nextQuestion));
+showCurrentQuestion(nextQuestion[0], nextQuestion[1], nextQuestion[2]);
 
-
-
-function defineNextQuestion(l,s,t){
-	//currentQuestion = showCurrentQuestion(l,s,t);
-	//quand répondu à la question (soit jusqu'à 4 soit juste)
-	if(dataSet[l][s][t]<dataSet[l][s].length){
-	t=t+1;
-	} else {
-		if(dataSet[l][s]<dataSet[l].length){
-		s=s+1;
-		t=0
-		} else {
-			if(dataSet[l][s]<dataSet[l].length) {
-			l=l+1;
-			t=0;
-			s=0;
-			} else {
-				console.log("congrats")
-			}
-		}
-		}
-	return [l,s,t]
-	}
-
+function defineNextQuestion(l, s, t) {
+  //currentQuestion = showCurrentQuestion(l,s,t);
+  //quand répondu à la question (soit jusqu'à 4 soit juste)
+  if (dataSet[l][s][t] < dataSet[l][s].length) {
+    t = t + 1;
+  } else {
+    if (dataSet[l][s] < dataSet[l].length) {
+      s = s + 1;
+      t = 0;
+    } else {
+      if (dataSet[l][s] < dataSet[l].length) {
+        l = l + 1;
+        t = 0;
+        s = 0;
+      } else {
+        console.log('congrats');
+      }
+    }
+  }
+  return [l, s, t];
+}

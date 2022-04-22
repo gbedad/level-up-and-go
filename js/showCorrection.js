@@ -2,6 +2,8 @@ const showCorrection = (attemptNumber, operation) => {
   let stringOperation = operation.toString();
   console.log(stringOperation);
   switch (attemptNumber) {
+    case 0:
+      return `?`;
     case 1:
       return `${stringOperation
         .substring(0, stringOperation.indexOf(' '))

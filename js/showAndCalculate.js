@@ -5,15 +5,23 @@ let subLevel = 0;
 let questionType = 0;
 //let currentQuestion = 0;
 let exercise = {};
-let attemptToExport = 1
+let attemptToExport;
 
-let userAnswerAttempta
-  let attemptNumbera
-  let computerAnswera
-  let currentButton
+let userAnswerAtt;
+let attemptNum = 0;
+let computerAns;
+let currentButton;
+let resultsFormInputs = {
+  userAnswerAtt: 0,
+  computerAns: 1,
+  attempt: attemptNum,
+};
 
-
+localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
+console.log(resultsFormInputs);
 //add condition on
+const resultRetrieved = localStorage.getItem('resultsFromUser');
+const result = JSON.parse(resultRetrieved);
 
 function randomNum(rangeMin, rangeMax) {
   let num = Math.floor(Math.random() * (rangeMax - rangeMin)) + rangeMin;
@@ -91,7 +99,15 @@ function calculateComputerAnswer(num1, operator, num2) {
   );
   let result = calculateComputerAnswer(num1, varOperator, num2);
 
-  exercise = { varShowOperation,varShowOperationWithResult, num1, num2, result, min, max };
+  exercise = {
+    varShowOperation,
+    varShowOperationWithResult,
+    num1,
+    num2,
+    result,
+    min,
+    max,
+  };
 
   return exercise;
 }*/
@@ -113,11 +129,11 @@ function whichOperation(l, s, t) {
   num1 = Number(numberNum(varSign1, num1));
   let num2;
   let showNum2;
-  if (varRangeMin2=="") {
-  let rangeNum2 = dataSet[l][s][t].condition;
-  num2 = num1 - rangeNum2;
+  if (varRangeMin2 == '') {
+    let rangeNum2 = dataSet[l][s][t].condition;
+    num2 = num1 - rangeNum2;
   } else {
-  num2 = randomNum(varRangeMin2, varRangeMax2);
+    num2 = randomNum(varRangeMin2, varRangeMax2);
   }
   showNum2 = showNum(varPar2, varSign2, num2);
   num2 = Number(numberNum(varSign2, num2));
@@ -132,47 +148,44 @@ function whichOperation(l, s, t) {
   );
   let result = calculateComputerAnswer(num1, varOperator, num2);
 
-  exercise = { varShowOperation,varShowOperationWithResult, num1, num2, result, min, max };
+  exercise = {
+    varShowOperation,
+    varShowOperationWithResult,
+    num1,
+    num2,
+    result,
+    min,
+    max,
+  };
 
   return exercise;
 }
 
-
-
-
-
-
-
 let questionDiv = document.querySelector('.instruction');
 function showCurrentQuestion(l, s, t) {
-
   let operation = whichOperation(l, s, t);
-  
+
   let operationText = document.createTextNode(operation.varShowOperation);
   questionDiv.appendChild(operationText);
   return operation;
 }
 /*console.log(showCurrentQuestion(0, 1, 0))*/
-function newQuestion(prev_l, prev_s, prev_t) { //l de la précédente, s de la précédente, etc. autres critères à ajouter 
-  let l = 0; // à revoir en fonction de la progression
-  let s = 0; // à revoir en fonction de la progression
-  let t = 0; // à revoir en fonction de la progression
-  showCurrentQuestion(l, s, t);
-  return {l,s,t} //si besoin autres features de la nouvelle question tirée à poser ?
-}
+// function newQuestion(prev_l, prev_s, prev_t) {
+//   //l de la précédente, s de la précédente, etc. autres critères à ajouter
+//   let l = 0; // à revoir en fonction de la progression
+//   let s = 0; // à revoir en fonction de la progression
+//   let t = 0; // à revoir en fonction de la progression
+//   showCurrentQuestion(l, s, t);
+//   return { l, s, t }; //si besoin autres features de la nouvelle question tirée à poser ?
+// }
 
 //const resultToExport = showCurrentQuestion(0, 1, 0);
-
-
-
-
 
 //function questionTacker(){
 //questionTracker(l,s,t,num1, operator, num2, cumulAttempts, lastAnswerStatus)
 //critères changement de question dépendent l,s,t, cumulAttempts, lastAnswerStatus
 //}
 // console.log(result);
-
 
 //succession of attempts
 
@@ -255,7 +268,6 @@ function showOtherBoxAttempt(attemptNumber) {
 }
 */
 
-
 /*function analyzeAnswer (fct) {
     let datas=fct();
     console.log(datas.userAnswerAttempt, datas.computerAnswer)
@@ -271,128 +283,149 @@ function showOtherBoxAttempt(attemptNumber) {
   }
 }*/
 
-const currentQuestion = showCurrentQuestion(4,0,0); //initialisation et test => à revoir 
+//initialisation et test => à revoir
+let currentQuestion = showCurrentQuestion(0, 0, 0);
 
-function playTheAttempt(attemptNumber){
- 
-  function getinput () {
-    //let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
+function playTheAttempt(attemptNumber) {
+  function getinput() {
+    //let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir
     //let attemptNumber=1; //initialisation des tentatives
     let currentButton = document.querySelector(`.btnAttempt${attemptNumber}`);
     let currentInput = document.querySelector(`.inpAttempt${attemptNumber}`);
     let userAnswerAttempt = currentInput.value;
     let computerAnswer = currentQuestion.result;
-    console.log(currentButton)
+    console.log(currentButton);
     return {
       userAnswerAttempt: userAnswerAttempt,
       attemptNumber: attemptNumber,
       computerAnswer: computerAnswer,
-      currentButton: currentButton
-    }
-    }
+      currentButton: currentButton,
+    };
+  }
 
   let datas = getinput();
 
+  userAnswerAtt = datas.userAnswerAttempt;
+  attemptNum = datas.attemptNumber;
+  computerAns = datas.computerAnswer;
+  currentButton = datas.currentButton;
 
-  userAnswerAttempta= datas.userAnswerAttempt
-  attemptNumbera= datas.attemptNumber
- computerAnswera= datas.computerAnswer
-  currentButton= datas.currentButton
-
-currentButton.addEventListener('click', () => analyzeAnswer(getinput))
+  currentButton.addEventListener('click', () => analyzeAnswer(getinput));
 }
 
- 
+function playTheQuestion() {
+  let attemptNumber = 1;
 
+  playTheAttempt(attemptNumber);
 
- function playTheQuestion(){
-    let attemptNumber=1; 
-    
-      playTheAttempt(attemptNumber);
-   
-    
-   /* doplayTheAttempt(attemptNumber);{
+  /* doplayTheAttempt(attemptNumber);{
     playTheAttempt(attemptNumber);
     attemptNumber=attemptNumber+1;
     } while()*/
-  }
+}
 
-  playTheQuestion()
-
+playTheQuestion();
 
 export { whichOperation };
 
 /*
 _________________________*/
 
-  function show(a, b){
-    let i = document.createElement("i")
-    /*let feedback = document.querySelector(`${a}, .attempt${b}`);*/
-    let feedback = document.querySelector(`.attempt${b}`);
-    const newIcon = feedback.appendChild(i)
-    /*const newClassToAdd = feedback.classList;*/
-    const newClassToAdd = newIcon.classList
-    newClassToAdd.add(`fa-solid`);
-    newClassToAdd.add(`${a}`);
-    newClassToAdd.add('isShown');
-    feedback.classList.remove('isHidden');
-    console.log(feedback)
-  }
+function show(a, b) {
+  let i = document.createElement('i');
+  /*let feedback = document.querySelector(`${a}, .attempt${b}`);*/
+  let feedback = document.querySelector(`.attempt${b}`);
+  const newIcon = feedback.appendChild(i);
+  /*const newClassToAdd = feedback.classList;*/
+  const newClassToAdd = newIcon.classList;
+  newClassToAdd.add(`fa-solid`);
+  newClassToAdd.add(`${a}`);
+  newClassToAdd.add('isShown');
+  feedback.classList.remove('isHidden');
+  console.log(feedback);
+}
 
-  function showBtn(b){
-    let feedback = document.querySelector(`.btnAttempt${b+1}`);
-    const newClassToAdd = feedback.classList;
-    newClassToAdd.add('isShown');
-    feedback.classList.remove('isHidden');
+function showBtn(b) {
+  const resultRetrieved = localStorage.getItem('resultsFromUser');
+  const result = JSON.parse(resultRetrieved);
+  console.log(result);
+  let feedback = document.querySelector(`.btnAttempt${b + 1}`);
+  const newClassToAdd = feedback.classList;
+  newClassToAdd.add('isShown');
+  feedback.classList.remove('isHidden');
+  document.querySelector(`.btnAttempt${b}`).disabled = true;
+  if (result.computerAns == result.userAnswerAtt) {
+    document.querySelector(`.btnAttempt${b}`).disabled = true;
   }
+}
 
-  function showInp(b){
-    let feedback = document.querySelector(`.inpAttempt${b+1}`);
-    const newClassToAdd = feedback.classList;
-    newClassToAdd.add('isShown');
-    feedback.classList.remove('isHidden');
-  }
+function showInp(b) {
+  let feedback = document.querySelector(`.inpAttempt${b + 1}`);
+  const newClassToAdd = feedback.classList;
+  newClassToAdd.add('isShown');
+  feedback.classList.remove('isHidden');
+}
 
- function analyzeAnswer (fct) {
-      let datas=fct();
-      console.log(datas.userAnswerAttempt, datas.computerAnswer, datas.attemptNumber)
-      if(datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber<4){
-      //affichage croix datas.attemptNumber
-      show(`fa-xmark`,datas.attemptNumber);
-      //affichage input et bouton datas.attemptNumber+1
-      showInp(datas.attemptNumber);
-      showBtn(datas.attemptNumber);
-      //correction n° datas.attemptNumber
-      datas.attemptNumber=datas.attemptNumber+1;
-      
-      playTheAttempt(datas.attemptNumber)
-      //return false
-      attemptToExport = datas.attemptNumber
-      console.log("======> Where ?", attemptToExport)
-      return attemptToExport
-      } else if (datas.userAnswerAttempt!=datas.computerAnswer && datas.attemptNumber==4){
-      //affichage croix datas.attemptNumber (4)
-      show('fa-xmark',datas.userAnswerAttempt);
+function analyzeAnswer(fct) {
+  let datas = fct();
+  console.log(
+    datas.userAnswerAttempt,
+    datas.computerAnswer,
+    datas.attemptNumber
+  );
+  resultsFormInputs = {
+    userAnswerAtt: datas.userAnswerAttempt,
+    computerAns: datas.computerAnswer,
+    attempt: datas.attemptNumber,
+  };
+
+  localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
+
+  if (
+    datas.userAnswerAttempt != datas.computerAnswer &&
+    datas.attemptNumber < 4
+  ) {
+    //affichage croix datas.attemptNumber
+    show(`fa-xmark`, datas.attemptNumber);
+    //affichage input et bouton datas.attemptNumber+1
+    showInp(datas.attemptNumber);
+    showBtn(datas.attemptNumber);
+    //correction n° datas.attemptNumber
+    datas.attemptNumber = datas.attemptNumber + 1;
+
+    playTheAttempt(datas.attemptNumber);
+
+    //return false
+
+    // console.log('======> Where ?', attemptToExport);
+    return attemptToExport;
+  } else if (
+    datas.userAnswerAttempt != datas.computerAnswer &&
+    datas.attemptNumber == 4
+  ) {
+    //affichage croix datas.attemptNumber (4)
+    show('fa-xmark', datas.attemptNumber);
     //correction n° datas.attemptNumber (4)
-    playTheQuestion()
-      //return false
-      } else if (datas.userAnswerAttempt==datas.computerAnswer) {
-      //affichage check datas.attemptNumber (4)
-      show('fa-check',datas.attemptNumber);
-      //correction n° datas.attemptNumber (4)
-      console.log("Data is correct")
-      location.reload()
-      showCurrentQuestion(0,1,0)
+    // playTheQuestion();
+    //return false
+  }
+  if (datas.userAnswerAttempt == datas.computerAnswer) {
+    //affichage check datas.attemptNumber (4)
+    show('fa-check', datas.attemptNumber);
+    //correction n° datas.attemptNumber (4)
+    console.log('Data is correct');
+    // location.reload();
+    // showCurrentQuestion(0, 1, 0);
 
-      playTheQuestion()
+    // playTheQuestion();
 
-      //return true
-    }
-    }
-console.log(attemptToExport)
+    //return true
+  }
+}
+console.log(attemptToExport);
 export default { currentQuestion, attemptToExport };
 
- /* function playTheAttempt(attemptNumber){
+/* function playTheAttempt(attemptNumber){
 console.log(attemptNumber)
     function getinput () {
     let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir 
@@ -413,51 +446,77 @@ console.log(attemptNumber)
     let attemptNumber= datas.attemptNumber
     let computerAnswer= datas.computerAnswer*/
 /*    let currentButton= datas.currentButton*/
- 
-   /* currentButton.addEventListener('click', () => analyzeAnswer(getinput, ))
+
+/* currentButton.addEventListener('click', () => analyzeAnswer(getinput, ))
     }*/
 
-   
+let l = 0;
+let s = 0;
+let t = 0;
 
-
-nextQuestion=[2,0,0];
-let l = nextQuestion[0];
-let s = nextQuestion[1];
-let t = nextQuestion[2];
-
-
-showCurrentQuestion(l,s,t);
+//showCurrentQuestion(l, s, t);
 
 //bouton apparaît si juste ou si attempt4
-let btnChange=document.querySelector('.change')
-nextQuestion = defineNextQuestion(l,s,t);
-l = nextQuestion[0];
-s = nextQuestion[1];
-t = nextQuestion[2];
-btnChange.addEventListener("click", ()=>console.log(nextQuestion))
-showCurrentQuestion(l,s,t);
+let btnChange = document.querySelector('.change');
+//nextQuestion = defineNextQuestion(l, s, t);
+// l = nextQuestion[0];
+// s = nextQuestion[1];
+// t = nextQuestion[2];
+btnChange.addEventListener('click', () => defineNextQuestion(l, s, t));
+//currentQuestion = showCurrentQuestion(l, s, t);
 
-
-
-function defineNextQuestion(l,s,t){
+function defineNextQuestion(l, s, t) {
   //currentQuestion = showCurrentQuestion(l,s,t);
   //quand répondu à la question (soit jusqu'à 4 soit juste)
-  if(dataSet[l][s][t].questionType<dataSet[l][s].length){
-  t=t+1;
+  if (dataSet[l][s][t].questionType < dataSet[l][s].length) {
+    t = t + 1;
   } else {
-    if(dataSet[l][s][t].sublevel<dataSet[l].length){
-    s=s+1;
-    t=0
+    if (dataSet[l][s][t].sublevel < dataSet[l].length) {
+      s = s + 1;
+      t = 0;
     } else {
-      if(dataSet[l][s][t].level<dataSet[l].length) {
-      l=l+1;
-      t=0;
-      s=0;
+      if (dataSet[l][s][t].level < dataSet[l].length) {
+        l = l + 1;
+        t = 0;
+        s = 0;
       } else {
-        console.log("congrats")
+        console.log('congrats');
       }
     }
-    }
-  return [l,s,t]
   }
+  clearPreviousQuestion();
+  showCurrentQuestion(l, s, t);
+  playTheQuestion();
+  return [l, s, t];
+}
 
+// Clear the previous question
+
+const clearPreviousQuestion = () => {
+  let shownButtons = document.querySelectorAll('.btnAttempt');
+  let shownButton1 = document.querySelector('.btnAttempt1');
+  let shownButton2 = document.querySelector('.btnAttempt2');
+  let shownButton3 = document.querySelector('.btnAttempt3');
+  let shownButton4 = document.querySelector('.btnAttempt4');
+  let a1 = shownButton1.classList;
+  let a2 = shownButton2.classList;
+  let a3 = shownButton3.classList;
+  let a4 = shownButton4.classList;
+  shownButton1.disabled = false;
+  a2.add('isHidden');
+  a2.remove('isShown');
+  a3.add('isHidden');
+  a3.remove('isShown');
+  a4.add('isHidden');
+  a4.remove('isShown');
+  let inputs = document.querySelectorAll('.attempt');
+  let icons = document.querySelectorAll('i');
+  questionDiv.textContent = '';
+  icons.forEach((el) => el.remove());
+  inputs.forEach((el) => (el.value = ''));
+
+  for (let i = 1; i < 4; i++) {
+    inputs[i].classList.add('isHidden');
+    inputs[i].classList.remove('isShown');
+  }
+};
