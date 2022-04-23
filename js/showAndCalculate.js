@@ -145,8 +145,9 @@ function whichOperation(l, s, t) {
   console.log(`num1 : ${num1}`); //ENLEVER
   let num2;
   let showNum2;
-  if (varRangeMin2 === '' || varRangeMin2 === '') {
+  if (varRangeMin2 === 0 || varRangeMax2 === 0) {
     let rangeNum2 = dataSet[l][s][t].condition;
+    console.log(`rangeNum2 : ${rangeNum2}`);
     num2 = num1 - rangeNum2;
   } else {
     num2 = randomNum(varRangeMin2, varRangeMax2);
