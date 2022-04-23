@@ -12,14 +12,23 @@ import { showCorrection } from './showCorrection.js';
 
 //* GLOBAL VARIABLES
 // Global variable for storing operation display
-let myInterval = null;
-let newAttempt;
+let newAttempt = 0;
 let newQuestion;
-let myData = whatToDo.currentQuestion;
+let myData;
+// let myData = whatToDo.currentQuestion;
 let myData2 = whatToDo.retrievedQuestion;
 
-let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
-console.log(myData, myData1, myData2);
+const getMyDataFormStorage = () => {
+  let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
+
+  return currentQuestion;
+};
+myData = getMyDataFormStorage();
+
+// let myData = JSON.parse(localStorage.getItem('currentQuestion'));
+
+// let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
+console.log(myData, myData2);
 let setStartColor;
 let setEndColor;
 // console.log(JSON.parse(localStorage.getItem('resultsFromUser')).attempt);
@@ -27,22 +36,22 @@ let retrievedObject = localStorage.getItem('resultsFromUser');
 let result = JSON.parse(retrievedObject);
 console.log(result);
 let operationByAttempt = showCorrection(
-  result.attempt,
+  newAttempt,
   myData.varShowOperationWithResult
 );
 console.log(operationByAttempt);
 
-const getCurrentQuestionFromStorage = () => {
-  let retrievedObject = localStorage.getItem('currentQuestion');
-  let currentQuestion = JSON.parse(retrievedObject);
-  myData = currentQuestion;
-  console.log(myData.varShowOperationWithResult);
-  operationByAttempt = showCorrection(
-    result.attempt,
-    myData.varShowOperationWithResult
-  );
-  console.log(operationByAttempt);
-};
+// const getCurrentQuestionFromStorage = () => {
+//   let retrievedObject = localStorage.getItem('currentQuestion');
+//   let currentQuestion = JSON.parse(retrievedObject);
+//   myData = currentQuestion;
+//   console.log(myData.varShowOperationWithResult);
+//   operationByAttempt = showCorrection(
+//     result.attempt,
+//     myData.varShowOperationWithResult
+//   );
+//   console.log(operationByAttempt);
+// };
 
 //? Functions for dom elements creation
 function createNode(element) {
@@ -102,10 +111,11 @@ const createFloors = () => {
     // floorNum.style.paddingLeft = '4px';
   }
 };
-
 createFloors();
+
 let operation;
 const updateAttempts = () => {
+  showOperation.textContent = '';
   operation = createTextNode(`${operationByAttempt}`);
   append(showOperation, operation);
 };
@@ -113,24 +123,29 @@ updateAttempts();
 console.log(showOperation.textContent);
 // Get value from localStorage
 const getUpdatesFromLocalStorage = () => {
+  newAttempt = 0;
+
   let retrievedObject = localStorage.getItem('resultsFromUser');
   let result = JSON.parse(retrievedObject);
   newAttempt = result.attempt;
 
-  // console.log(result);
-  operationByAttempt = showCorrection(
-    newAttempt,
-    myData.varShowOperationWithResult
-  );
+  console.log(result);
+  // operationByAttempt = showCorrection(
+  //   newAttempt,
+  //   myData.varShowOperationWithResult
+  // );
   // console.log(operationByAttempt);
-  showOperation.textContent = operationByAttempt;
+  // showOperation.textContent = operationByAttempt;
   if (result.computerAns == result.userAnswerAtt && newAttempt <= 4) {
-    showOperation.textContent = `${myData.varShowOperationWithResult}`;
+    showOperation.textContent = `${
+      JSON.parse(localStorage.getItem('currentQuestion'))
+        .varShowOperationWithResult
+    }`;
     clearInterval(myInterval);
     changeColor();
     showArrow();
     createElevatorAnimation();
-    localStorage.getItem('currentQuestion');
+    // localStorage.getItem('currentQuestion');
   }
   if (newAttempt <= 3) {
     setStartColor = 'yellowGreen';
@@ -147,23 +162,28 @@ const getUpdatesFromLocalStorage = () => {
   }
   changeColor();
   // console.log(setEndColor, setStartColor);
-  return newAttempt;
+  // return newAttempt;
 };
-if (myInterval === null) {
-  myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
-}
+
+let myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
 
 const clearQuestion = () => {
+  let clearAttempt = { userAnswerAtt: 0, computerAns: 1, attempt: 0 };
+  localStorage.setItem('resultsFromUser', JSON.stringify(clearAttempt));
   myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
   document.querySelector('.correction').textContent = '';
-  newAttempt = 0;
+  // retrievedObject = localStorage.getItem('resultsFromUser');
+  // result = JSON.parse(retrievedObject);
+  // newAttempt = result.attempt;
+  // newAttempt = result.attempt;
+  console.log(newAttempt);
   currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
   console.log(currentQuestion);
   operationByAttempt = showCorrection(
     newAttempt,
     currentQuestion.varShowOperationWithResult
   );
-  operation.textContent = `${operationByAttempt}`;
+  operation.textContent = operationByAttempt;
   console.log(operationByAttempt);
   myData = currentQuestion;
 };
