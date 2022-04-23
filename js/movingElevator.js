@@ -12,9 +12,14 @@ import { showCorrection } from './showCorrection.js';
 
 //* GLOBAL VARIABLES
 // Global variable for storing operation display
+let myInterval = null;
 let newAttempt;
+let newQuestion;
 let myData = whatToDo.currentQuestion;
-console.log(myData);
+let myData2 = whatToDo.retrievedQuestion;
+
+let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
+console.log(myData, myData1, myData2);
 let setStartColor;
 let setEndColor;
 // console.log(JSON.parse(localStorage.getItem('resultsFromUser')).attempt);
@@ -26,6 +31,18 @@ let operationByAttempt = showCorrection(
   myData.varShowOperationWithResult
 );
 console.log(operationByAttempt);
+
+const getCurrentQuestionFromStorage = () => {
+  let retrievedObject = localStorage.getItem('currentQuestion');
+  let currentQuestion = JSON.parse(retrievedObject);
+  myData = currentQuestion;
+  console.log(myData.varShowOperationWithResult);
+  operationByAttempt = showCorrection(
+    result.attempt,
+    myData.varShowOperationWithResult
+  );
+  console.log(operationByAttempt);
+};
 
 //? Functions for dom elements creation
 function createNode(element) {
@@ -87,9 +104,9 @@ const createFloors = () => {
 };
 
 createFloors();
-
+let operation;
 const updateAttempts = () => {
-  const operation = createTextNode(`${operationByAttempt}`);
+  operation = createTextNode(`${operationByAttempt}`);
   append(showOperation, operation);
 };
 updateAttempts();
@@ -99,12 +116,13 @@ const getUpdatesFromLocalStorage = () => {
   let retrievedObject = localStorage.getItem('resultsFromUser');
   let result = JSON.parse(retrievedObject);
   newAttempt = result.attempt;
-  console.log(result);
+
+  // console.log(result);
   operationByAttempt = showCorrection(
     newAttempt,
     myData.varShowOperationWithResult
   );
-  console.log(operationByAttempt);
+  // console.log(operationByAttempt);
   showOperation.textContent = operationByAttempt;
   if (result.computerAns == result.userAnswerAtt && newAttempt <= 4) {
     showOperation.textContent = `${myData.varShowOperationWithResult}`;
@@ -112,6 +130,7 @@ const getUpdatesFromLocalStorage = () => {
     changeColor();
     showArrow();
     createElevatorAnimation();
+    localStorage.getItem('currentQuestion');
   }
   if (newAttempt <= 3) {
     setStartColor = 'yellowGreen';
@@ -127,16 +146,32 @@ const getUpdatesFromLocalStorage = () => {
     createElevatorAnimation();
   }
   changeColor();
-  console.log(setEndColor, setStartColor);
+  // console.log(setEndColor, setStartColor);
   return newAttempt;
 };
+if (myInterval === null) {
+  myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
+}
 
-const myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
+const clearQuestion = () => {
+  myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
+  document.querySelector('.correction').textContent = '';
+  newAttempt = 0;
+  currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
+  console.log(currentQuestion);
+  operationByAttempt = showCorrection(
+    newAttempt,
+    currentQuestion.varShowOperationWithResult
+  );
+  operation.textContent = `${operationByAttempt}`;
+  console.log(operationByAttempt);
+  myData = currentQuestion;
+};
 
 console.log(newAttempt);
 const btn1 = document.querySelector('#removeDivs');
 
-btn1.addEventListener('click', getUpdatesFromLocalStorage);
+btn1.addEventListener('click', clearQuestion);
 
 let groundFloor = document.querySelector('.floor0');
 let pos = groundFloor.offsetTop;
