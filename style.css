@@ -118,11 +118,11 @@ color: /*#7ED957*/  #C9E265;
   right: 0;
   margin:auto;
   transition: all 0.3s;
-  width: 50px;
+  width: 70px;
   height: 70px;
   cursor: pointer;
   position: absolute;
-  /* background-color: /* #00C2CB *//*#7ED957*//* #C9E265*/
+  background-color:  #00C2CB ;/*#7ED957*//* #C9E265*/
   border-radius: 50%;
   padding: 0;
 }
@@ -199,6 +199,6 @@ color: /*#7ED957*/  #C9E265;
 .input-field {
   width: fit-content;
   padding: 10px;
-  color: transparent;
+  /* color: transparent; */
   display: none;
 }
