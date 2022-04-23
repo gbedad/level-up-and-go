@@ -28,6 +28,7 @@ function randomNum(rangeMin, rangeMax) {
   return num;
 }
 
+
 function showNum(par, sign, num) {
   //display a number with parenthesis and sign
   let parStart;
@@ -69,7 +70,10 @@ function calculateComputerAnswer(num1, operator, num2) {
     result = num1 + num2;
   } else result = num1 - num2;
   return result;
+  console.log("zut")
 }
+
+console.log(calculateComputerAnswer(-2,'+',-2))
 
 /*function whichOperation(l, s, t) {
   let min = Number(dataSet[l][s][t].min);
@@ -127,9 +131,10 @@ function whichOperation(l, s, t) {
   let num1 = randomNum(varRangeMin1, varRangeMax1);
   let showNum1 = showNum(varPar1, varSign1, num1);
   num1 = Number(numberNum(varSign1, num1));
+  console.log(`num1 : ${num1}`) //ENLEVER
   let num2;
   let showNum2;
-  if (varRangeMin2 == '') {
+  if (varRangeMin2 === '' || varRangeMin2 === '') {
     let rangeNum2 = dataSet[l][s][t].condition;
     num2 = num1 - rangeNum2;
   } else {
@@ -137,7 +142,7 @@ function whichOperation(l, s, t) {
   }
   showNum2 = showNum(varPar2, varSign2, num2);
   num2 = Number(numberNum(varSign2, num2));
-
+  console.log(`num2 : ${num2}`) //ENLEVER
   let varShowOperation = showOperation(showNum1, varOperator, showNum2);
   let varShowOperationWithResult = showOperationWithResult(
     showNum1,
@@ -147,7 +152,7 @@ function whichOperation(l, s, t) {
     showNum2
   );
   let result = calculateComputerAnswer(num1, varOperator, num2);
-
+  console.log(`result : ${result}`) //ENLEVER
   exercise = {
     varShowOperation,
     varShowOperationWithResult,
@@ -454,7 +459,7 @@ let l = 0;
 let s = 0;
 let t = 0;
 
-//showCurrentQuestion(l, s, t);
+showCurrentQuestion(0, 1, 0);
 
 //bouton apparaît si juste ou si attempt4
 let btnChange = document.querySelector('.change');

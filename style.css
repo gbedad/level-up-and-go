@@ -1,3 +1,38 @@
+/*Navbar*/
+
+.navbar-custom {
+  background-color: #c9e265/*orangered;*//*#FF6D4D*//*#FF784D*//*#FF914D*/;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+            color: #384996;
+            font-family: caveat;
+            font-size: 26px;
+            font-weight: bold;
+
+        }
+.color1{
+  color: #4D8BD1;
+  padding-right: 4px;
+}
+.color2{
+  color: #2D68AB;
+  padding-right: 4px;
+}
+.color3{
+  color: #4054AD;
+  padding-right: 4px;
+}
+.color4{
+  color: #0F237B;
+  padding-right: 1px;
+}
+.color5{
+  color: #081A6B;
+}
+/**/
+
 .row {
   padding: 0;
 }
