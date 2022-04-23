@@ -15,8 +15,10 @@ import { showCorrection } from './showCorrection.js';
 let newAttempt = 0;
 let newQuestion;
 let myData;
+let values;
 // let myData = whatToDo.currentQuestion;
 let myData2 = whatToDo.retrievedQuestion;
+let isNewQuestion = true;
 
 const getMyDataFormStorage = () => {
   let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
@@ -145,6 +147,7 @@ const getUpdatesFromLocalStorage = () => {
     changeColor();
     showArrow();
     createElevatorAnimation();
+    isNewQuestion = false;
     // localStorage.getItem('currentQuestion');
   }
   if (newAttempt <= 3) {
@@ -159,26 +162,29 @@ const getUpdatesFromLocalStorage = () => {
     clearInterval(myInterval);
     showArrow();
     createElevatorAnimation();
+    isNewQuestion = false;
   }
   changeColor();
   // console.log(setEndColor, setStartColor);
   // return newAttempt;
 };
 
-let myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
+let myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
 
 const clearQuestion = () => {
   let clearAttempt = { userAnswerAtt: 0, computerAns: 1, attempt: 0 };
   localStorage.setItem('resultsFromUser', JSON.stringify(clearAttempt));
-  myInterval = setInterval(getUpdatesFromLocalStorage, 1000);
+  myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
   document.querySelector('.correction').textContent = '';
   // retrievedObject = localStorage.getItem('resultsFromUser');
   // result = JSON.parse(retrievedObject);
   // newAttempt = result.attempt;
   // newAttempt = result.attempt;
+  newAttempt = clearAttempt.attempt;
   console.log(newAttempt);
   currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
   console.log(currentQuestion);
+
   operationByAttempt = showCorrection(
     newAttempt,
     currentQuestion.varShowOperationWithResult
@@ -186,9 +192,11 @@ const clearQuestion = () => {
   operation.textContent = operationByAttempt;
   console.log(operationByAttempt);
   myData = currentQuestion;
+  values = getAnimateFromTo();
+  isNewQuestion = true;
 };
 
-console.log(newAttempt);
+console.log(myData);
 const btn1 = document.querySelector('#removeDivs');
 
 btn1.addEventListener('click', clearQuestion);
@@ -260,8 +268,12 @@ const getAnimateFromTo = () => {
   let dist = myData.num2 * 40;
   return { dist, from, to, e };
 };
+console.log('isNewQ', isNewQuestion);
 
-let values = getAnimateFromTo();
+if (isNewQuestion == true) {
+  values = getAnimateFromTo();
+}
+
 console.log(values);
 console.log(newAttempt);
 let floorDivs = [...document.querySelectorAll('.floor')];
