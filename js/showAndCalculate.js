@@ -17,17 +17,28 @@ let resultsFormInputs = {
   attempt: attemptNum,
 };
 
+let levels = {
+  level: 0,
+  subLevel: 0,
+  questionType: 0,
+};
+localStorage.setItem('levels', JSON.stringify(levels));
+
 localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
 console.log(resultsFormInputs);
 //add condition on
-const resultRetrieved = localStorage.getItem('resultsFromUser');
-const result = JSON.parse(resultRetrieved);
+// let resultRetrieved = localStorage.getItem('resultsFromUser');
+// let result = JSON.parse(resultRetrieved);
+
+// let levelsRetrieved = localStorage.getItem('levels');
+// let levelsResult = JSON.parse(levelsRetrieved);
+
+// console.log(levelsResult);
 
 function randomNum(rangeMin, rangeMax) {
   let num = Math.floor(Math.random() * (rangeMax - rangeMin)) + rangeMin;
   return num;
 }
-
 
 function showNum(par, sign, num) {
   //display a number with parenthesis and sign
@@ -70,10 +81,10 @@ function calculateComputerAnswer(num1, operator, num2) {
     result = num1 + num2;
   } else result = num1 - num2;
   return result;
-  console.log("zut")
+  console.log('zut');
 }
 
-console.log(calculateComputerAnswer(-2,'+',-2))
+console.log(calculateComputerAnswer(-2, '+', -2));
 
 /*function whichOperation(l, s, t) {
   let min = Number(dataSet[l][s][t].min);
@@ -131,7 +142,7 @@ function whichOperation(l, s, t) {
   let num1 = randomNum(varRangeMin1, varRangeMax1);
   let showNum1 = showNum(varPar1, varSign1, num1);
   num1 = Number(numberNum(varSign1, num1));
-  console.log(`num1 : ${num1}`) //ENLEVER
+  console.log(`num1 : ${num1}`); //ENLEVER
   let num2;
   let showNum2;
   if (varRangeMin2 === '' || varRangeMin2 === '') {
@@ -142,7 +153,7 @@ function whichOperation(l, s, t) {
   }
   showNum2 = showNum(varPar2, varSign2, num2);
   num2 = Number(numberNum(varSign2, num2));
-  console.log(`num2 : ${num2}`) //ENLEVER
+  console.log(`num2 : ${num2}`); //ENLEVER
   let varShowOperation = showOperation(showNum1, varOperator, showNum2);
   let varShowOperationWithResult = showOperationWithResult(
     showNum1,
@@ -152,7 +163,7 @@ function whichOperation(l, s, t) {
     showNum2
   );
   let result = calculateComputerAnswer(num1, varOperator, num2);
-  console.log(`result : ${result}`) //ENLEVER
+  console.log(`result : ${result}`); //ENLEVER
   exercise = {
     varShowOperation,
     varShowOperationWithResult,
@@ -290,15 +301,18 @@ function showOtherBoxAttempt(attemptNumber) {
 
 //initialisation et test => à revoir
 let currentQuestion = showCurrentQuestion(0, 0, 0);
+localStorage.setItem('currentQuestion', JSON.stringify(currentQuestion));
 
 function playTheAttempt(attemptNumber) {
   function getinput() {
+    let retrievedQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
+    let currentQuestionResult = retrievedQuestion.result;
     //let currentQuestion = showCurrentQuestion(0,0,0); //initialisation et test => à revoir
     //let attemptNumber=1; //initialisation des tentatives
     let currentButton = document.querySelector(`.btnAttempt${attemptNumber}`);
     let currentInput = document.querySelector(`.inpAttempt${attemptNumber}`);
     let userAnswerAttempt = currentInput.value;
-    let computerAnswer = currentQuestion.result;
+    let computerAnswer = currentQuestionResult;
     console.log(currentButton);
     return {
       userAnswerAttempt: userAnswerAttempt,
@@ -337,6 +351,7 @@ export { whichOperation };
 _________________________*/
 
 function show(a, b) {
+  document.querySelector(`.attempt${b}`).textContent = '';
   let i = document.createElement('i');
   /*let feedback = document.querySelector(`${a}, .attempt${b}`);*/
   let feedback = document.querySelector(`.attempt${b}`);
@@ -347,13 +362,13 @@ function show(a, b) {
   newClassToAdd.add(`${a}`);
   newClassToAdd.add('isShown');
   feedback.classList.remove('isHidden');
+
   console.log(feedback);
 }
-
+let resultRetrieved = localStorage.getItem('resultsFromUser');
+let result = JSON.parse(resultRetrieved);
+console.log(result);
 function showBtn(b) {
-  const resultRetrieved = localStorage.getItem('resultsFromUser');
-  const result = JSON.parse(resultRetrieved);
-  console.log(result);
   let feedback = document.querySelector(`.btnAttempt${b + 1}`);
   const newClassToAdd = feedback.classList;
   newClassToAdd.add('isShown');
@@ -383,7 +398,7 @@ function analyzeAnswer(fct) {
     computerAns: datas.computerAnswer,
     attempt: datas.attemptNumber,
   };
-
+  console.log(resultsFormInputs);
   localStorage.setItem('resultsFromUser', JSON.stringify(resultsFormInputs));
 
   if (
@@ -428,7 +443,6 @@ function analyzeAnswer(fct) {
   }
 }
 console.log(attemptToExport);
-export default { currentQuestion, attemptToExport };
 
 /* function playTheAttempt(attemptNumber){
 console.log(attemptNumber)
@@ -455,11 +469,11 @@ console.log(attemptNumber)
 /* currentButton.addEventListener('click', () => analyzeAnswer(getinput, ))
     }*/
 
-let l = 0;
-let s = 0;
-let t = 0;
+// let l = 0;
+// let s = 0;
+// let t = 0;
 
-showCurrentQuestion(0, 1, 0);
+// showCurrentQuestion(0, 1, 0);
 
 //bouton apparaît si juste ou si attempt4
 let btnChange = document.querySelector('.change');
@@ -469,18 +483,31 @@ let btnChange = document.querySelector('.change');
 // t = nextQuestion[2];
 btnChange.addEventListener('click', () => defineNextQuestion(l, s, t));
 //currentQuestion = showCurrentQuestion(l, s, t);
+// let levelsRetrieved = localStorage.getItem('levels');
+// let levelsResult = JSON.parse(levelsRetrieved);
+// let l = levelsResult.level;
+// let s = levelsResult.subLevel;
+// let t = levelsResult.questionType;
+let l;
+let s;
+let t;
 
 function defineNextQuestion(l, s, t) {
+  let levelsRetrieved = localStorage.getItem('levels');
+  let levelsResult = JSON.parse(levelsRetrieved);
+  l = levelsResult.level;
+  s = levelsResult.subLevel;
+  t = levelsResult.questionType;
   //currentQuestion = showCurrentQuestion(l,s,t);
   //quand répondu à la question (soit jusqu'à 4 soit juste)
-  if (dataSet[l][s][t].questionType < dataSet[l][s].length) {
+  if (dataSet[l][s][t]['questionType'] < dataSet[l][s].length) {
     t = t + 1;
   } else {
-    if (dataSet[l][s][t].sublevel < dataSet[l].length) {
+    if (dataSet[l][s][t]['sublevel'] < dataSet[l].length) {
       s = s + 1;
       t = 0;
     } else {
-      if (dataSet[l][s][t].level < dataSet[l].length) {
+      if (dataSet[l][s][t]['level'] < dataSet[l].length) {
         l = l + 1;
         t = 0;
         s = 0;
@@ -489,16 +516,26 @@ function defineNextQuestion(l, s, t) {
       }
     }
   }
+
   clearPreviousQuestion();
-  showCurrentQuestion(l, s, t);
+  let currentQuestion = showCurrentQuestion(l, s, t);
   playTheQuestion();
+  levels = {
+    level: l,
+    subLevel: s,
+    questionType: t,
+  };
+  localStorage.setItem('levels', JSON.stringify(levels));
+  localStorage.setItem('currentQuestion', JSON.stringify(currentQuestion));
+  console.log(currentQuestion);
+  console.log(l, s, t);
   return [l, s, t];
 }
 
+export default { currentQuestion, attemptToExport };
 // Clear the previous question
 console.log(document.querySelector('.btnAttempt1'));
 const clearPreviousQuestion = () => {
-  let shownButtons = document.querySelectorAll('.btnAttempt');
   let shownButton1 = document.querySelector('.btnAttempt1');
   let shownButton2 = document.querySelector('.btnAttempt2');
   let shownButton3 = document.querySelector('.btnAttempt3');
@@ -515,9 +552,9 @@ const clearPreviousQuestion = () => {
   a4.add('isHidden');
   a4.remove('isShown');
   let inputs = document.querySelectorAll('.attempt');
-  let icons = document.querySelectorAll('i');
+  let icons = document.querySelectorAll('.icon');
   questionDiv.textContent = '';
-  icons.forEach((el) => el.remove());
+  icons.forEach((el) => (el.innerHTML = ''));
   inputs.forEach((el) => (el.value = ''));
 
   for (let i = 1; i < 4; i++) {
