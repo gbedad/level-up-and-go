@@ -496,7 +496,7 @@ function defineNextQuestion(l, s, t) {
 }
 
 // Clear the previous question
-
+console.log(document.querySelector('.btnAttempt1'));
 const clearPreviousQuestion = () => {
   let shownButtons = document.querySelectorAll('.btnAttempt');
   let shownButton1 = document.querySelector('.btnAttempt1');
