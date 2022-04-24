@@ -313,15 +313,20 @@ floorDivs.forEach((floor) => {
 });
 
 const showArrow = () => {
-  arrow.style.top = `${values.to + 41}px`;
+  arrow.style.top =
+    `${values.from}` > `${values.to}`
+      ? `${values.to + 41}px`
+      : `${values.from + 41}px`;
   arrow.style.height = `${values.dist}px`;
   arrow.style.display = 'block';
+  i.style.display = 'block';
 };
 
 const hideArrow = () => {
-  arrow.style.top = `0px`;
-  arrow.style.height = `0px`;
+  // arrow.style.top = `0px`;
+  // arrow.style.height = `0px`;
   arrow.style.display = 'none';
+  i.style.display = 'none';
 };
 
 //   `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
@@ -331,15 +336,14 @@ append(building, arrow);
 append(arrow, i);
 i.classList.add('fa-solid');
 i.classList.add(
-  `${myData.num2}` == 0
-    ? 'fa-hand'
-    : `${myData.num1}` <= `${myData.result}` && `${myData.num2}` !== 0
-    ? 'fa-arrow-up-long'
-    : 'fa-arrow-down-long'
+  `${myData.num1}` > `${myData.result}`
+    ? 'fa-arrow-down-long'
+    : 'fa-arrow-up-long'
 );
 i.style.position = 'absolute';
 i.style.left = 'calc(50% + 5px)';
-i.style.top = `calc(50% - ${Math.abs(myData.num2) / 2}) `;
+// i.style.top = `calc(50% - ${Math.abs(myData.num2) / 2}) `;
+i.style.top = `calc(50% - ${myData.num2 / 2}) `;
 i.style.color = 'navy';
 i.style.lineHeight = '30px';
 
@@ -354,11 +358,12 @@ const createElevatorAnimation = () => {
     anime({
       targets: '.elevator',
       translateY: [`${values.from}`, `${values.to}`],
-      duration: Math.abs(1000 * `${myData.num2}`),
+      // duration: Math.abs(1000 * `${myData.num1}`),
+      duration: Math.abs(1000),
       easing: 'easeInOutQuad',
       forward: true,
     });
-  }, 500);
+  }, 1000);
 };
 
 //? ANIMATE AVATAR
