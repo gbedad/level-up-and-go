@@ -374,7 +374,7 @@ function showBtn(b) {
   const newClassToAdd = feedback.classList;
   newClassToAdd.add('isShown');
   feedback.classList.remove('isHidden');
-  document.querySelector(`.btnAttempt${b}`).disabled = true;
+  // document.querySelector(`.btnAttempt${b}`).disabled = true;
   if (result.computerAns == result.userAnswerAtt) {
     document.querySelector(`.btnAttempt${b}`).disabled = true;
   }
@@ -501,9 +501,9 @@ function defineNextQuestion(l, s, t) {
   t = levelsResult.questionType;
   //currentQuestion = showCurrentQuestion(l,s,t);
   //let sublevelCounter=0;//où initialiser
-  console.log(sublevelCounter);
-  if ((dataSet[l][s][t]['questionType'] < dataSet[l][s].length) //|| sublevelCounter<4)
-  {
+
+  if (dataSet[l][s][t]['questionType'] < dataSet[l][s].length) {
+    //|| sublevelCounter<4)
     t = t + 1;
     //t=randomNum(1, dataSet[l][s].length);
     //sublevelCounter=sublevelCounter+1;
@@ -513,7 +513,8 @@ function defineNextQuestion(l, s, t) {
       t = 0;
       //sublevelCounter=0;
     } else {
-      if (dataSet[l][s][t]['level'] < 6) { //to be replaced when refining and adding further levels by number of levels
+      if (dataSet[l][s][t]['level'] < 6) {
+        //to be replaced when refining and adding further levels by number of levels
         l = l + 1;
         t = 0;
         s = 0;

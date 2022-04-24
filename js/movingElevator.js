@@ -4,11 +4,11 @@ import myRanges from '../data/ranges.json' assert { type: 'json' };
 // import './showOperationMode.js';
 import { whichOperation } from './showAndCalculate.js';
 
-import whatToDo from './showAndCalculate.js';
+import whatToDo from './showAndCalculate.js'; // Not used
 
-console.log(whatToDo.attemptToExport);
+console.log(whatToDo.attemptToExport); //not used
 
-import { showCorrection } from './showCorrection.js';
+import { showCorrection } from './showCorrection.js'; // Not used
 
 //* GLOBAL VARIABLES
 // Global variable for storing operation display
@@ -16,21 +16,23 @@ let newAttempt = 0;
 let newQuestion;
 let myData;
 let values;
+let operation;
 // let myData = whatToDo.currentQuestion;
-let myData2 = whatToDo.retrievedQuestion;
+let myData2 = whatToDo.retrievedQuestion; // not used
 let isNewQuestion = true;
 
-const getMyDataFormStorage = () => {
+const getMyDataFromStorage = () => {
   let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
 
   return currentQuestion;
 };
-myData = getMyDataFormStorage();
+myData = getMyDataFromStorage();
+let previousQuestion = myData;
 
+console.log(previousQuestion);
 // let myData = JSON.parse(localStorage.getItem('currentQuestion'));
 
 // let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
-console.log(myData, myData2);
 let setStartColor;
 let setEndColor;
 // console.log(JSON.parse(localStorage.getItem('resultsFromUser')).attempt);
@@ -80,6 +82,7 @@ const i = document.createElement('i');
 const avatar = document.querySelector('.avatar');
 const avatar_btn = document.querySelector('.avatar');
 const showOperation = document.querySelector('.correction');
+// let floorDivs = document.querySelectorAll('.floor');
 
 // let start = Math.round(Math.random(0, 1) * 10);
 // let end = -Math.round(Math.random(0, 1) * 10);
@@ -91,17 +94,16 @@ const retrieveBuildingHeight = () => {
 
 let { start, end } = retrieveBuildingHeight();
 
+// removeDivs();
 const removeDivs = () => {
   let floorDiv = document.querySelectorAll('.floor');
-  floorDiv.forEach((el) => el.remove());
-  boxAnimate.remove();
-  elevatorStart.remove();
-  ope.remove();
+  floorDiv.forEach((floor) => floor.remove());
 };
 
 //* Function create floors depending on values start and end
-const createFloors = () => {
-  for (let i = start; i >= end; i--) {
+const createFloors = (max, min) => {
+  removeDivs();
+  for (let i = max; i >= min; i--) {
     // building.innerHTML += `<div class="floor">${i}</div>`;
     let floor = createNode('div');
     append(building, floor);
@@ -109,13 +111,34 @@ const createFloors = () => {
     floor.classList.add(`floor${i}`);
     // floor.textContent = `${i}`;
     let floorNum = createTextNode(`${i}`);
+    floorNum >= 0
+      ? (floor.style.paddingLeft = '10px')
+      : (floor.style.paddingLeft = '5px');
     append(floor, floorNum);
     // floorNum.style.paddingLeft = '4px';
   }
 };
-createFloors();
+createFloors(start, end);
 
-let operation;
+let groundFloor = document.querySelector('.floor0');
+let pos = groundFloor.offsetTop;
+
+const getPositionOfElement = (element, target) => {
+  const eleRect = element.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+  const top = eleRect.top - targetRect.top;
+  return top;
+};
+let top = getPositionOfElement(groundFloor, rightCol);
+
+console.log(pos, top);
+
+//* Position the road depending on ground floor
+road.style.top = `${top + 80}px`;
+avatar_btn.style.top = `${top - 100}px`;
+avatar_btn.style.cursor = 'pointer';
+avatar_btn.classList.add('moving_btn');
+
 const updateAttempts = () => {
   showOperation.textContent = '';
   operation = createTextNode(`${operationByAttempt}`);
@@ -125,24 +148,19 @@ updateAttempts();
 console.log(showOperation.textContent);
 // Get value from localStorage
 const getUpdatesFromLocalStorage = () => {
-  newAttempt = 0;
-
   let retrievedObject = localStorage.getItem('resultsFromUser');
   let result = JSON.parse(retrievedObject);
   newAttempt = result.attempt;
-
   console.log(result);
-  // operationByAttempt = showCorrection(
-  //   newAttempt,
-  //   myData.varShowOperationWithResult
-  // );
-  // console.log(operationByAttempt);
-  // showOperation.textContent = operationByAttempt;
-  if (result.computerAns == result.userAnswerAtt && newAttempt <= 4) {
-    showOperation.textContent = `${
-      JSON.parse(localStorage.getItem('currentQuestion'))
-        .varShowOperationWithResult
-    }`;
+  operationByAttempt = showCorrection(
+    newAttempt,
+    myData.varShowOperationWithResult
+  );
+  console.log(operationByAttempt);
+  showOperation.textContent = operationByAttempt;
+  let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
+  if (Number(result.computerAns) == result.userAnswerAtt && newAttempt <= 4) {
+    showOperation.textContent = `${currentQuestion.varShowOperationWithResult}`;
     clearInterval(myInterval);
     changeColor();
     showArrow();
@@ -165,60 +183,68 @@ const getUpdatesFromLocalStorage = () => {
     isNewQuestion = false;
   }
   changeColor();
-  // console.log(setEndColor, setStartColor);
-  // return newAttempt;
+  newAttempt = 0;
 };
 
-let myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
+let myInterval = setInterval(getUpdatesFromLocalStorage, 500);
+myData = getMyDataFromStorage();
+console.log(
+  previousQuestion.varShowOperationWithResult,
+  currentQuestion.varShowOperationWithResult
+);
 
 const clearQuestion = () => {
-  let clearAttempt = { userAnswerAtt: 0, computerAns: 1, attempt: 0 };
-  localStorage.setItem('resultsFromUser', JSON.stringify(clearAttempt));
-  myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
+  let clearAttempt = { userAnswerAtt: '', computerAns: 1, attempt: 0 };
+  newAttempt = clearAttempt.attempt;
   document.querySelector('.correction').textContent = '';
+  localStorage.setItem('resultsFromUser', JSON.stringify(clearAttempt));
+  hideArrow();
+  stopAnimation();
+  elevatorStart.style.display = 'none';
+  elevatorStart.style.top = `0px`;
+  boxAnimate.style.display = 'none';
+  avatar.style.top = `0px`;
+
   // retrievedObject = localStorage.getItem('resultsFromUser');
   // result = JSON.parse(retrievedObject);
   // newAttempt = result.attempt;
   // newAttempt = result.attempt;
-  newAttempt = clearAttempt.attempt;
-  console.log(newAttempt);
-  currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
-  console.log(currentQuestion);
+  let buildingHeight = retrieveBuildingHeight();
+  start = buildingHeight.start;
+  end = buildingHeight.end;
 
-  operationByAttempt = showCorrection(
-    newAttempt,
-    currentQuestion.varShowOperationWithResult
-  );
-  operation.textContent = operationByAttempt;
+  console.log(newAttempt);
+  currentQuestion = getMyDataFromStorage();
+  createFloors(start, end);
+  console.log(currentQuestion);
+  groundFloor = document.querySelector('.floor0');
+  let newTop = getPositionOfElement(groundFloor, rightCol);
+  road.style.top = `${newTop + 80}px`;
+  updateAttempts();
+  // operationByAttempt = showCorrection(
+  //   newAttempt,
+  //   currentQuestion.varShowOperationWithResult
+  // );
+
+  // operation.textContent = `${operationByAttempt}`;
   console.log(operationByAttempt);
   myData = currentQuestion;
   values = getAnimateFromTo();
   isNewQuestion = true;
+  myInterval = setInterval(getUpdatesFromLocalStorage, 500);
 };
 
-console.log(myData);
+// if (
+//   previousQuestion.varShowOperationWithResult !=
+//   JSON.parse(localStorage.getItem('currentQuestion')).varShowOperationWithResult
+// ) {
+//   clearQuestion();
+// }
+
+console.log(myData, start, end);
 const btn1 = document.querySelector('#removeDivs');
 
 btn1.addEventListener('click', clearQuestion);
-
-let groundFloor = document.querySelector('.floor0');
-let pos = groundFloor.offsetTop;
-
-const getPositionOfElement = (element, target) => {
-  const eleRect = element.getBoundingClientRect();
-  const targetRect = target.getBoundingClientRect();
-  const top = eleRect.top - targetRect.top;
-  return top;
-};
-let top = getPositionOfElement(groundFloor, rightCol);
-
-console.log(pos, top);
-
-//* Position the road depending on ground floor
-road.style.top = `${top + 80}px`;
-avatar_btn.style.top = `${top - 100}px`;
-avatar_btn.style.cursor = 'pointer';
-avatar_btn.classList.add('moving_btn');
 
 //* RANDOMIZATION FUNCTIONS OF VALUES DEPENDING ON RANGE
 function getRandomDs(min, max) {
@@ -262,26 +288,25 @@ console.table(s, ds, start, end);
 // };
 
 const getAnimateFromTo = () => {
-  let e = myData.result;
-  let from = (start - myData.num1) * 40;
-  let to = (start - myData.result) * 40;
-  let dist = myData.num2 * 40;
+  let e = Number(myData.result);
+  let from = Number(start - myData.num1) * 40;
+  let to = Number(start - myData.result) * 40;
+  let dist = Number(myData.num2) * 40;
   return { dist, from, to, e };
 };
 console.log('isNewQ', isNewQuestion);
 
-if (isNewQuestion == true) {
-  values = getAnimateFromTo();
-}
+// if (isNewQuestion == true) {
+values = getAnimateFromTo();
+// }
 
 console.log(values);
 console.log(newAttempt);
-let floorDivs = [...document.querySelectorAll('.floor')];
+
 let startDiv = document.querySelector(`.floor${myData.num1}`);
 let endDiv = document.querySelector(`.floor${values.e}`);
 const changeColor = () => {
   startDiv.style.color = `${setStartColor}`;
-
   endDiv.style.color = `${setEndColor}`;
 };
 
@@ -290,40 +315,52 @@ const changeColor = () => {
 // endDiv.style.backgroundColor = 'orangeRed';
 
 //! SETTLE PADDING-LEFT OF TEXT CONTENT ON FLOORS
-floorDivs.forEach((floor) => {
-  let floorLevel = floor.textContent;
-  floorLevel >= 0
-    ? (floor.style.paddingLeft = '10px')
-    : (floor.style.paddingLeft = '5px');
-});
+
+// floorDivs.forEach((floor) => {
+//   let floorLevel = floor.textContent;
+//   floorLevel >= 0
+//     ? (floor.style.paddingLeft = '10px')
+//     : (floor.style.paddingLeft = '5px');
+// });
 
 const showArrow = () => {
-  arrow.style.top = `${values.to + 41}px`;
+  arrow.style.top =
+    `${Number(myData.num1)}` < `${Number(myData.result)}`
+      ? `${Number(values.to + 41)}px`
+      : `${Number(values.from + 41)}px`;
   arrow.style.height = `${values.dist}px`;
+  arrow.style.display = 'block';
+  i.style.display = 'block';
+};
+
+const hideArrow = () => {
+  // arrow.style.top = `0px`;
+  // arrow.style.height = `0px`;
+  arrow.style.display = 'none';
+  i.style.display = 'none';
 };
 
 //   `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
 
 arrow.classList.add('ve-line');
 append(building, arrow);
-append(arrow, i);
-i.classList.add('fa-solid');
-i.classList.add(
-  `${myData.num2}` == 0
-    ? 'fa-hand'
-    : `${myData.num1}` <= `${myData.result}` && `${myData.num2}` !== 0
-    ? 'fa-arrow-up-long'
-    : 'fa-arrow-down-long'
-);
-i.style.position = 'absolute';
-i.style.left = 'calc(50% + 5px)';
-i.style.top = `calc(50% - ${Math.abs(myData.num2) / 2}) `;
-i.style.color = 'navy';
-i.style.lineHeight = '30px';
+// append(arrow, i);
+// i.classList.add('fa-solid');
+// i.classList.add(
+//   `${myData.num1}` > `${myData.result}`
+//     ? 'fa-arrow-down-long'
+//     : 'fa-arrow-up-long'
+// );
+// i.style.position = 'absolute';
+// i.style.left = 'calc(50% + 5px)';
+// // i.style.top = `calc(50% - ${Math.abs(myData.num2) / 2}) `;
+// i.style.top = `calc(50% - ${myData.num2 / 2}) `;
+// i.style.color = 'navy';
+// i.style.lineHeight = '30px';
 
 const createElevatorAnimation = () => {
   setTimeout(() => {
-    stopAnimation();
+    // stopAnimation();
     elevatorStart.style.display = 'block';
     elevatorStart.style.top = `${values.from}px`;
     boxAnimate.style.display = 'block';
@@ -332,11 +369,12 @@ const createElevatorAnimation = () => {
     anime({
       targets: '.elevator',
       translateY: [`${values.from}`, `${values.to}`],
-      duration: Math.abs(1000 * `${myData.num2}`),
+      // duration: Math.abs(1000 * `${myData.num1}`),
+      duration: Math.abs(1000),
       easing: 'easeInOutQuad',
       forward: true,
     });
-  }, 500);
+  }, 300);
 };
 
 //? ANIMATE AVATAR
@@ -353,8 +391,9 @@ const avatarAnimation = () => {
 // avatarAnimation();
 
 const stopAnimation = () => {
-  anime.set('.moving_btn', { top: 0 });
-  anime.remove('.moving_btn');
+  // anime.set('.moving_btn', { top: 0 });
+  anime.remove('.avatar');
+  anime.remove('.elevator');
 };
 
 //? FUNCTION FOR AVATAR : GO TO ELEVATOR START POSITION
