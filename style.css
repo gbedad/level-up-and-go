@@ -355,6 +355,25 @@ color: /*#7ED957*/  #C9E265;
   box-shadow: none !important;
 }
 
+.btnNext {
+  margin:auto;
+  transition: all 0.3s;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  background-color:  #00C2CB ;/*#7ED957*//* #C9E265*/
+  border-radius: 50%;
+  padding: 0;
+  color: white;
+  font-size: 22px;
+  border: none;
+}
+
+.iconElevator {
+  position: relative;
+  top:300px;
+  left:40px;
+}
 /*Demander à Gérald puis à Dan pourquoi le style du placeholder ne fonctionne pas*/
 ::placeholder { 
   color: red;
