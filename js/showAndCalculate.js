@@ -500,18 +500,24 @@ function defineNextQuestion(l, s, t) {
   s = levelsResult.subLevel;
   t = levelsResult.questionType;
   //currentQuestion = showCurrentQuestion(l,s,t);
-  //quand répondu à la question (soit jusqu'à 4 soit juste)
-  if (dataSet[l][s][t]['questionType'] < dataSet[l][s].length) {
+  //let sublevelCounter=0;//où initialiser
+  console.log(sublevelCounter);
+  if ((dataSet[l][s][t]['questionType'] < dataSet[l][s].length) //|| sublevelCounter<4)
+  {
     t = t + 1;
+    //t=randomNum(1, dataSet[l][s].length);
+    //sublevelCounter=sublevelCounter+1;
   } else {
     if (dataSet[l][s][t]['sublevel'] < dataSet[l].length) {
       s = s + 1;
       t = 0;
+      //sublevelCounter=0;
     } else {
-      if (dataSet[l][s][t]['level'] < dataSet[l].length) {
+      if (dataSet[l][s][t]['level'] < 6) { //to be replaced when refining and adding further levels by number of levels
         l = l + 1;
         t = 0;
         s = 0;
+        //sublevelCounter=0;
       } else {
         console.log('congrats');
       }
