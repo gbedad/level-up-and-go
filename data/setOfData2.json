@@ -13,7 +13,7 @@
 ]
 ],
 [
-[{"level": 2, "sublevel": 1, "questionType" : 1, "par1": 0, "sign1": "", "rangeMin1": 3, "rangeMax1": 10, "operator": "-", "par2": 0, "sign2": "", "rangeMin2": "", "rangeMax2": "", "condition": 1, "min": 0, "max": 12}
+[{"level": 2, "sublevel": 1, "questionType" : 1, "par1": 0, "sign1": "", "rangeMin1": 3, "rangeMax1": 10, "operator": "-", "par2": 0, "sign2": "", "rangeMin2": "", "rangeMax2": "", "condition": 1, "min": -4, "max": 12}
 , {"level": 2, "sublevel": 1, "questionType" : 2, "par1": 0, "sign1": "", "rangeMin1": 3, "rangeMax1": 10, "operator": "-", "par2": 0, "sign2": "", "rangeMin2": "", "rangeMax2": "", "condition": 2, "min": 0, "max": 12}
 , {"level": 2, "sublevel": 1, "questionType" : 3, "par1": 0, "sign1": "", "rangeMin1": 3, "rangeMax1": 10, "operator": "-", "par2": 0, "sign2": "", "rangeMin2": "", "rangeMax2": "", "condition": 3, "min": 0, "max": 12}
 ],
