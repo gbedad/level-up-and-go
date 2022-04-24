@@ -4,11 +4,11 @@ import myRanges from '../data/ranges.json' assert { type: 'json' };
 // import './showOperationMode.js';
 import { whichOperation } from './showAndCalculate.js';
 
-import whatToDo from './showAndCalculate.js';
+import whatToDo from './showAndCalculate.js'; // Not used
 
 console.log(whatToDo.attemptToExport);
 
-import { showCorrection } from './showCorrection.js';
+import { showCorrection } from './showCorrection.js'; // Not used
 
 //* GLOBAL VARIABLES
 // Global variable for storing operation display
@@ -16,8 +16,9 @@ let newAttempt = 0;
 let newQuestion;
 let myData;
 let values;
+let operation;
 // let myData = whatToDo.currentQuestion;
-let myData2 = whatToDo.retrievedQuestion;
+let myData2 = whatToDo.retrievedQuestion; // not used
 let isNewQuestion = true;
 
 const getMyDataFormStorage = () => {
@@ -30,7 +31,6 @@ myData = getMyDataFormStorage();
 // let myData = JSON.parse(localStorage.getItem('currentQuestion'));
 
 // let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
-console.log(myData, myData2);
 let setStartColor;
 let setEndColor;
 // console.log(JSON.parse(localStorage.getItem('resultsFromUser')).attempt);
@@ -92,8 +92,8 @@ const retrieveBuildingHeight = () => {
 let { start, end } = retrieveBuildingHeight();
 
 const removeDivs = () => {
-  let floorDiv = document.querySelectorAll('.floor');
-  floorDiv.forEach((el) => el.remove());
+  // let floorDiv = document.querySelectorAll('.floor');
+  // floorDiv.forEach((el) => el.remove());
   boxAnimate.remove();
   elevatorStart.remove();
   ope.remove();
@@ -115,7 +115,6 @@ const createFloors = () => {
 };
 createFloors();
 
-let operation;
 const updateAttempts = () => {
   showOperation.textContent = '';
   operation = createTextNode(`${operationByAttempt}`);
@@ -125,24 +124,21 @@ updateAttempts();
 console.log(showOperation.textContent);
 // Get value from localStorage
 const getUpdatesFromLocalStorage = () => {
-  newAttempt = 0;
+  // newAttempt = 0;
 
   let retrievedObject = localStorage.getItem('resultsFromUser');
   let result = JSON.parse(retrievedObject);
   newAttempt = result.attempt;
-
   console.log(result);
-  // operationByAttempt = showCorrection(
-  //   newAttempt,
-  //   myData.varShowOperationWithResult
-  // );
-  // console.log(operationByAttempt);
-  // showOperation.textContent = operationByAttempt;
+  operationByAttempt = showCorrection(
+    newAttempt,
+    myData.varShowOperationWithResult
+  );
+  console.log(operationByAttempt);
+  showOperation.textContent = operationByAttempt;
+  let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
   if (result.computerAns == result.userAnswerAtt && newAttempt <= 4) {
-    showOperation.textContent = `${
-      JSON.parse(localStorage.getItem('currentQuestion'))
-        .varShowOperationWithResult
-    }`;
+    showOperation.textContent = `${currentQuestion.varShowOperationWithResult}`;
     clearInterval(myInterval);
     changeColor();
     showArrow();
@@ -172,6 +168,12 @@ const getUpdatesFromLocalStorage = () => {
 let myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
 
 const clearQuestion = () => {
+  hideArrow();
+  stopAnimation();
+  elevatorStart.style.display = 'none';
+  elevatorStart.style.top = `0px`;
+  boxAnimate.style.display = 'none';
+  avatar.style.top = `0px`;
   let clearAttempt = { userAnswerAtt: 0, computerAns: 1, attempt: 0 };
   localStorage.setItem('resultsFromUser', JSON.stringify(clearAttempt));
   myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
@@ -184,12 +186,13 @@ const clearQuestion = () => {
   console.log(newAttempt);
   currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
   console.log(currentQuestion);
+  updateAttempts();
+  // operationByAttempt = showCorrection(
+  //   newAttempt,
+  //   currentQuestion.varShowOperationWithResult
+  // );
 
-  operationByAttempt = showCorrection(
-    newAttempt,
-    currentQuestion.varShowOperationWithResult
-  );
-  operation.textContent = operationByAttempt;
+  // operation.textContent = `${operationByAttempt}`;
   console.log(operationByAttempt);
   myData = currentQuestion;
   values = getAnimateFromTo();
@@ -270,9 +273,9 @@ const getAnimateFromTo = () => {
 };
 console.log('isNewQ', isNewQuestion);
 
-if (isNewQuestion == true) {
-  values = getAnimateFromTo();
-}
+// if (isNewQuestion == true) {
+values = getAnimateFromTo();
+// }
 
 console.log(values);
 console.log(newAttempt);
@@ -300,6 +303,13 @@ floorDivs.forEach((floor) => {
 const showArrow = () => {
   arrow.style.top = `${values.to + 41}px`;
   arrow.style.height = `${values.dist}px`;
+  arrow.style.display = 'block';
+};
+
+const hideArrow = () => {
+  arrow.style.top = `0px`;
+  arrow.style.height = `0px`;
+  arrow.style.display = 'none';
 };
 
 //   `${values.dist}` < 0 ? `${-values.dist}px` : `${values.dist}px`;
@@ -323,7 +333,7 @@ i.style.lineHeight = '30px';
 
 const createElevatorAnimation = () => {
   setTimeout(() => {
-    stopAnimation();
+    // stopAnimation();
     elevatorStart.style.display = 'block';
     elevatorStart.style.top = `${values.from}px`;
     boxAnimate.style.display = 'block';
@@ -353,8 +363,9 @@ const avatarAnimation = () => {
 // avatarAnimation();
 
 const stopAnimation = () => {
-  anime.set('.moving_btn', { top: 0 });
-  anime.remove('.moving_btn');
+  // anime.set('.moving_btn', { top: 0 });
+  anime.remove('.avatar');
+  anime.remove('.elevator');
 };
 
 //? FUNCTION FOR AVATAR : GO TO ELEVATOR START POSITION
