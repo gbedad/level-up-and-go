@@ -374,7 +374,7 @@ function showBtn(b) {
   const newClassToAdd = feedback.classList;
   newClassToAdd.add('isShown');
   feedback.classList.remove('isHidden');
-  document.querySelector(`.btnAttempt${b}`).disabled = true;
+  // document.querySelector(`.btnAttempt${b}`).disabled = true;
   if (result.computerAns == result.userAnswerAtt) {
     document.querySelector(`.btnAttempt${b}`).disabled = true;
   }
