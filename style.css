@@ -57,6 +57,7 @@
   background-image: url(../assets/city3.png);
   background-size: cover;
   background-repeat: no-repeat;
+
 }
 
 .box2 {
@@ -71,10 +72,11 @@
 }
   
 .box3 {
-  background-color: #white; /*photo*/
+  background-color: #white;
   background-image: url(../assets/WordArt0.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 
 
 }
@@ -124,12 +126,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 .box9 {
   background-color: #white; /*photo*/
   background-image: url(../assets/WordArt0.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 .box10 {
   background-color: #5DA1D7;
@@ -164,6 +168,7 @@
   background-image: url(../assets/WordArt0.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .box14 {
@@ -189,6 +194,7 @@
   background-image: url(../assets/WordArt2.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 .box18 {
   background-color: #51CA99;
@@ -205,6 +211,7 @@
   background-image: url(../assets/WordArt2.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 .box20 {
   background-color: #66BE6A;
@@ -222,8 +229,12 @@
   justify-content: center;
 }
 .box23 {
-   background-color: #2A388F;
-  
+  background-color: #2A388F;
+  background-image: url(.../assets/logo_samekh_fond_transparent.svg);
+/*  background-size: 160px ;*/
+  background-repeat: no-repeat;
+  background-position: center center;
+
 }
 .box24 {
   background-color: #00AECA;
@@ -239,6 +250,7 @@
   background-image: url(../assets/WordArt0.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
 }
 
 /*Play*/

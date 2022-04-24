@@ -1,7 +1,7 @@
-@import url(//fonts.googleapis.com/css?family=Montserrat:300,400,500);
+
 .contact2 {
-  font-family: "Montserrat", sans-serif;
-  color: #8d97ad;
+  font-family: roboto, sans-serif;
+  color: /*#8d97ad*/;
   font-weight: 300;
 	padding: 60px 0;
   margin-bottom: 170px;
@@ -14,7 +14,7 @@
 .contact2 h4,
 .contact2 h5,
 .contact2 h6 {
-  color: #3e4555;
+  color: #081A6B;
 }
 
 .contact2 .font-weight-medium {
@@ -40,15 +40,10 @@
     box-shadow: 0px 0px 30px rgba(115, 128, 157, 0.1);
 }
 
-.contact2 .detail-box .round-social {
+.contact2 .detail-box {
   margin-top: 100px;
 }
 
-.contact2 .round-social a {
-  background: transparent;
-  margin: 0 7px;
-  padding: 11px 12px;
-}
 
 .contact2 .contact-container .links a {
   color: #8d97ad;
@@ -59,20 +54,37 @@
   top: 200px;
 }
 
-.contact2 .btn-danger-gradiant {
-  background: #ff4d7e;
-  background: -webkit-linear-gradient(legacy-direction(to right), #ff4d7e 0%, #ff6a5b 100%);
-  background: -webkit-gradient(linear, left top, right top, from(#ff4d7e), to(#ff6a5b));
-  background: -webkit-linear-gradient(left, #ff4d7e 0%, #ff6a5b 100%);
-  background: -o-linear-gradient(left, #ff4d7e 0%, #ff6a5b 100%);
-  background: linear-gradient(to right, #ff4d7e 0%, #ff6a5b 100%);
+.btnContact{
+  background-color: #00AECA;
+  /*top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;*/
+  margin:auto;
+  border-radius: 0%;
+  width: 100px;
+  height: 40px;
+  cursor: pointer;
+  position: absolute;
+  background-color:  #00C2CB ;/*#7ED957*//* #C9E265*/
+  padding: 0;
+}
+.bg-image{
+  background-image: url(../assets/augustin-louis-cauchy.jpeg);
+}
+.detail-box{
+  color: black;
+}
+.bg-custom{
+  background-color:#EAF5FF ;
 }
 
- .contact2 .btn-danger-gradiant:hover {
-  background: #ff6a5b;
-  background: -webkit-linear-gradient(legacy-direction(to right), #ff6a5b 0%, #ff4d7e 100%);
-  background: -webkit-gradient(linear, left top, right top, from(#ff6a5b), to(#ff4d7e));
-  background: -webkit-linear-gradient(left, #ff6a5b 0%, #ff4d7e 100%);
-  background: -o-linear-gradient(left, #ff6a5b 0%, #ff4d7e 100%);
-  background: linear-gradient(to right, #ff6a5b 0%, #ff4d7e 100%);
+.bg-container-custom{
+  background-image: url(../assets/city6.png);
+  background-size: auto;
+ /* background-color: red;*/
+}
+
+.overflowshown{
+  overflow: visible;
 }
