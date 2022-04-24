@@ -6,7 +6,7 @@ import { whichOperation } from './showAndCalculate.js';
 
 import whatToDo from './showAndCalculate.js'; // Not used
 
-console.log(whatToDo.attemptToExport);
+console.log(whatToDo.attemptToExport); //not used
 
 import { showCorrection } from './showCorrection.js'; // Not used
 
@@ -21,13 +21,15 @@ let operation;
 let myData2 = whatToDo.retrievedQuestion; // not used
 let isNewQuestion = true;
 
-const getMyDataFormStorage = () => {
+const getMyDataFromStorage = () => {
   let currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
 
   return currentQuestion;
 };
-myData = getMyDataFormStorage();
+myData = getMyDataFromStorage();
+let previousQuestion = myData;
 
+console.log(previousQuestion);
 // let myData = JSON.parse(localStorage.getItem('currentQuestion'));
 
 // let myData1 = JSON.parse(localStorage.getItem('currentQuestion'));
@@ -166,7 +168,11 @@ const getUpdatesFromLocalStorage = () => {
 };
 
 let myInterval = setInterval(getUpdatesFromLocalStorage, 3000);
-
+myData = getMyDataFromStorage();
+console.log(
+  previousQuestion.varShowOperationWithResult,
+  currentQuestion.varShowOperationWithResult
+);
 const clearQuestion = () => {
   hideArrow();
   stopAnimation();
@@ -184,7 +190,7 @@ const clearQuestion = () => {
   // newAttempt = result.attempt;
   newAttempt = clearAttempt.attempt;
   console.log(newAttempt);
-  currentQuestion = JSON.parse(localStorage.getItem('currentQuestion'));
+  currentQuestion = getMyDataFromStorage();
   console.log(currentQuestion);
   updateAttempts();
   // operationByAttempt = showCorrection(
@@ -199,6 +205,12 @@ const clearQuestion = () => {
   isNewQuestion = true;
 };
 
+if (
+  previousQuestion.varShowOperationWithResult !=
+  JSON.parse(localStorage.getItem('currentQuestion')).varShowOperationWithResult
+) {
+  clearQuestion();
+}
 console.log(myData);
 const btn1 = document.querySelector('#removeDivs');
 
